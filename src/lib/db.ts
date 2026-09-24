@@ -56,6 +56,7 @@ const PASSWORD_REQUESTS_FILE = path.join(DATA_DIR, "password_requests.json");
 
 let isDataDirEnsured = false;
 const memoryCache = new Map<string, any>();
+const fileMtimes = new Map<string, number>();
 const pendingWrites = new Map<string, NodeJS.Timeout>();
 
 function ensureFile<T>(filePath: string, defaultData: T) {
@@ -87,11 +88,6 @@ function ensureDataDir() {
 }
 
 function readJson<T>(filePath: string, fallback: T): T {
-  // Ultra-fast sub-millisecond memory cache check
-  if (memoryCache.has(filePath)) {
-    return memoryCache.get(filePath) as T;
-  }
-
   if (!isDataDirEnsured) {
     ensureDataDir();
     isDataDirEnsured = true;
@@ -99,9 +95,18 @@ function readJson<T>(filePath: string, fallback: T): T {
 
   try {
     if (fs.existsSync(filePath)) {
+      const stats = fs.statSync(filePath);
+      const mtime = stats.mtimeMs;
+
+      // Return cached object if file has not been modified on disk
+      if (memoryCache.has(filePath) && fileMtimes.get(filePath) === mtime) {
+        return memoryCache.get(filePath) as T;
+      }
+
       const raw = fs.readFileSync(filePath, "utf-8").replace(/^\uFEFF/, "");
       const parsed = JSON.parse(raw) as T;
       memoryCache.set(filePath, parsed);
+      fileMtimes.set(filePath, mtime);
       return parsed;
     }
   } catch (error) {
@@ -124,6 +129,7 @@ function writeJson<T>(filePath: string, data: T, asyncDisk = true): void {
   if (!asyncDisk) {
     try {
       fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
+      fileMtimes.set(filePath, fs.statSync(filePath).mtimeMs);
     } catch (err) {
       console.error(`Error writing synchronously to ${filePath}:`, err);
     }
@@ -139,6 +145,9 @@ function writeJson<T>(filePath: string, data: T, asyncDisk = true): void {
     pendingWrites.delete(filePath);
     try {
       await fs.promises.writeFile(filePath, JSON.stringify(data, null, 2), "utf-8");
+      try {
+        fileMtimes.set(filePath, (await fs.promises.stat(filePath)).mtimeMs);
+      } catch {}
     } catch (err) {
       console.error(`Async write error for ${filePath}:`, err);
     }
