@@ -33,11 +33,12 @@
     "id": "usr-reporter-narnaul",
     "name": "नवीन शर्मा (Naveen Sharma)",
     "email": "naveen.reporter@groundzero.media",
-    "role": "REPORTER",
+    "role": "DISTRICT_EDITOR",
     "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
-    "district": "नारनौल / Narnaul",
-    "phone": "+91 99912 34567",
-    "bio": "Field Senior Reporter, Narnaul & Ateli"
+    "district": "?????? / Mahendergarh",
+    "phone": "+91 99912 99999",
+    "bio": "Field Senior Reporter, Narnaul & Ateli",
+    "password": "NaveenGZ#2026"
   },
   {
     "id": "usr-social-lead",

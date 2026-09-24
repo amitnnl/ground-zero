@@ -18,6 +18,7 @@ import {
   PhotoAlbum,
   PushAlert,
   PushSubscription,
+  PasswordResetRequest,
 } from "./types";
 import {
   initialArticles,
@@ -51,6 +52,7 @@ const VIDEOS_FILE = path.join(DATA_DIR, "videos.json");
 const GALLERY_FILE = path.join(DATA_DIR, "gallery.json");
 const NOTIFICATIONS_FILE = path.join(DATA_DIR, "notifications.json");
 const SUBSCRIPTIONS_FILE = path.join(DATA_DIR, "subscriptions.json");
+const PASSWORD_REQUESTS_FILE = path.join(DATA_DIR, "password_requests.json");
 
 let isDataDirEnsured = false;
 const memoryCache = new Map<string, any>();
@@ -81,6 +83,7 @@ function ensureDataDir() {
   ensureFile(GALLERY_FILE, samplePhotoAlbums);
   ensureFile(NOTIFICATIONS_FILE, initialPushAlerts);
   ensureFile(SUBSCRIPTIONS_FILE, []);
+  ensureFile(PASSWORD_REQUESTS_FILE, []);
 }
 
 function readJson<T>(filePath: string, fallback: T): T {
@@ -750,6 +753,41 @@ export async function deleteUser(id: string): Promise<boolean> {
   if (filtered.length === users.length) return false;
   writeJson(USERS_FILE, filtered);
   return true;
+}
+
+/* =========================================================
+   PASSWORD RESET REQUESTS (ADMIN GATED)
+========================================================= */
+
+export async function getPasswordRequests(): Promise<PasswordResetRequest[]> {
+  return readJson<PasswordResetRequest[]>(PASSWORD_REQUESTS_FILE, []);
+}
+
+export async function createPasswordRequest(
+  requestData: Omit<PasswordResetRequest, "id" | "requestedAt" | "status">
+): Promise<PasswordResetRequest> {
+  const requests = await getPasswordRequests();
+  const newRequest: PasswordResetRequest = {
+    ...requestData,
+    id: `pwd-req-${Date.now()}`,
+    requestedAt: new Date().toISOString(),
+    status: "PENDING",
+  };
+  requests.unshift(newRequest);
+  writeJson(PASSWORD_REQUESTS_FILE, requests);
+  return newRequest;
+}
+
+export async function updatePasswordRequest(
+  id: string,
+  updates: Partial<PasswordResetRequest>
+): Promise<PasswordResetRequest | null> {
+  const requests = await getPasswordRequests();
+  const index = requests.findIndex((r) => r.id === id);
+  if (index === -1) return null;
+  requests[index] = { ...requests[index], ...updates };
+  writeJson(PASSWORD_REQUESTS_FILE, requests);
+  return requests[index];
 }
 
 

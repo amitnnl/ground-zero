@@ -42,6 +42,68 @@ function LoginForm() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
+  // Password Reset Request Modal State
+  const [showResetModal, setShowResetModal] = useState(false);
+  const [requestEmail, setRequestEmail] = useState("");
+  const [requestReason, setRequestReason] = useState("");
+  const [submittingReset, setSubmittingReset] = useState(false);
+  const [resetFeedback, setResetFeedback] = useState<{ success: boolean; message: string } | null>(null);
+
+  const handleSendResetRequest = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!requestEmail.trim()) {
+      setResetFeedback({
+        success: false,
+        message: b("Please enter your registered staff email.", "कृपया अपना पंजीकृत ईमेल दर्ज करें।"),
+      });
+      return;
+    }
+
+    setSubmittingReset(true);
+    setResetFeedback(null);
+    try {
+      const res = await fetch("/api/users/password-requests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: requestEmail.trim(),
+          reason: requestReason.trim() || "User requested password reset via login screen",
+        }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setResetFeedback({
+          success: true,
+          message:
+            data.message ||
+            b(
+              "Your password reset request has been submitted to the Admin!",
+              "आपका पासवर्ड बदलने का अनुरोध व्यवस्थापक (Admin) को भेज दिया गया है!"
+            ),
+        });
+        setTimeout(() => {
+          setShowResetModal(false);
+          setResetFeedback(null);
+          setRequestReason("");
+        }, 4000);
+      } else {
+        setResetFeedback({
+          success: false,
+          message:
+            data.error ||
+            b("Could not submit request. Please verify your email.", "अनुरोध प्रेषित नहीं हो सका। ईमेल जांचें।"),
+        });
+      }
+    } catch {
+      setResetFeedback({
+        success: false,
+        message: b("Network error. Please try again.", "सर्वर से संपर्क नहीं हो सका। पुनः प्रयास करें।"),
+      });
+    } finally {
+      setSubmittingReset(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
@@ -286,9 +348,18 @@ function LoginForm() {
                 <span>{b("Remember this workstation (7 days)", "इस वर्कस्टेशन को याद रखें (7 दिन)")}</span>
               </label>
 
-              <span className="text-xs text-rose-600 dark:text-rose-400 font-semibold cursor-pointer hover:underline">
-                {b("Need Help?", "सहायता चाहिए?")}
-              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  setRequestEmail(email || "");
+                  setShowResetModal(true);
+                  setResetFeedback(null);
+                }}
+                className="text-xs text-rose-600 dark:text-rose-400 font-semibold cursor-pointer hover:underline flex items-center gap-1"
+              >
+                <KeyRound size={12} />
+                <span>{b("Forgot / Request Password Change", "पासवर्ड बदलने का अनुरोध भेजें")}</span>
+              </button>
             </div>
 
             <button
@@ -381,6 +452,127 @@ function LoginForm() {
       <footer className="py-4 px-4 border-t border-slate-200 dark:border-slate-800 text-center text-xs text-slate-500 dark:text-slate-400">
         © {new Date().getFullYear()} Ground Zero Newsroom. {b("All rights reserved. Secured with Role-Based Access Control.", "सर्वाधिकार सुरक्षित। RBAC सुरक्षा द्वारा संरक्षित।")}
       </footer>
+
+      {/* Password Reset / Change Request Modal */}
+      {showResetModal && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 animate-in fade-in">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl space-y-4">
+            <div className="p-5 bg-rose-500/10 border-b border-rose-500/30 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <KeyRound className="w-5 h-5 text-rose-600 dark:text-rose-400" />
+                <div>
+                  <h3 className="font-bold text-base text-slate-900 dark:text-white">
+                    {b("Request Password Reset", "पासवर्ड बदलने का अनुरोध भेजें")}
+                  </h3>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    {b("Admin approval required for all password updates", "सुरक्षा नीति: केवल व्यवस्थापक ही पासवर्ड बदल सकते हैं")}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowResetModal(false);
+                  setResetFeedback(null);
+                }}
+                className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleSendResetRequest} className="p-5 space-y-4 text-xs">
+              {resetFeedback && (
+                <div
+                  className={`p-3.5 rounded-xl border text-xs font-medium flex items-start gap-2.5 ${
+                    resetFeedback.success
+                      ? "bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/30 text-emerald-800 dark:text-emerald-300"
+                      : "bg-rose-50 dark:bg-rose-500/10 border-rose-200 dark:border-rose-500/30 text-rose-800 dark:text-rose-300"
+                  }`}
+                >
+                  {resetFeedback.success ? (
+                    <CheckCircle2 size={16} className="text-emerald-500 shrink-0 mt-0.5" />
+                  ) : (
+                    <AlertCircle size={16} className="text-rose-500 shrink-0 mt-0.5" />
+                  )}
+                  <span>{resetFeedback.message}</span>
+                </div>
+              )}
+
+              <div>
+                <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">
+                  {b("Registered Staff Email / Staff ID *", "पंजीकृत स्टाफ ईमेल या यूज़र आईडी *")}
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                    <Mail size={14} />
+                  </div>
+                  <input
+                    type="text"
+                    required
+                    value={requestEmail}
+                    onChange={(e) => setRequestEmail(e.target.value)}
+                    placeholder="e.g. naveen.reporter@groundzero.media"
+                    className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-hidden focus:border-rose-500"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">
+                  {b("Reason / Note for Administrator", "व्यवस्थापक हेतु कारण / विवरण")}
+                </label>
+                <textarea
+                  rows={2}
+                  value={requestReason}
+                  onChange={(e) => setRequestReason(e.target.value)}
+                  placeholder={b("e.g. Forgot password / New workstation setup", "उदा. पासवर्ड भूल गए / नया डिवाइस सेटअप")}
+                  className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-hidden focus:border-rose-500 resize-none"
+                />
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 text-[11px] text-slate-500 dark:text-slate-400 space-y-1">
+                <div className="font-bold text-slate-700 dark:text-slate-300">
+                  {b("How it works:", "यह कैसे कार्य करता है:")}
+                </div>
+                <p>
+                  {b(
+                    "Your request will be queued in the Super Admin's security console. Once approved, the admin will set a new password and notify you.",
+                    "आपका अनुरोध व्यवस्थापक (Admin) की सुरक्षा कतार में पहुंच जाएगा। अनुमोदन के बाद व्यवस्थापक नया पासवर्ड निर्धारित करेंगे।"
+                  )}
+                </p>
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowResetModal(false);
+                    setResetFeedback(null);
+                  }}
+                  className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold cursor-pointer"
+                >
+                  {b("Cancel", "रद्द करें")}
+                </button>
+                <button
+                  type="submit"
+                  disabled={submittingReset}
+                  className="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold cursor-pointer shadow-md shadow-rose-900/30 disabled:opacity-50 flex items-center gap-1.5"
+                >
+                  {submittingReset ? (
+                    b("Sending...", "भेजा जा रहा है...")
+                  ) : (
+                    <>
+                      <KeyRound size={13} />
+                      <span>{b("Send Request to Admin", "व्यवस्थापक को अनुरोध भेजें")}</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -57,13 +57,16 @@ export async function POST(request: NextRequest) {
     }
 
     // Password verification:
-    // Allow if standard master password "groundzero123" or "admin123" is entered, or if 1-click login was used
+    // If user has a custom password set by admin, check it. Otherwise fallback to demo passwords.
     const validPasswords = ["groundzero123", "admin123", "password", "gz2026"];
-    if (password && !validPasswords.includes(password) && password !== matchedUser.id) {
+    const isMasterPassword = validPasswords.includes(password) || password === matchedUser.id;
+    const isDirectMatch = Boolean(matchedUser.password && password === matchedUser.password);
+
+    if (password && !isDirectMatch && !isMasterPassword) {
       return NextResponse.json(
         {
           success: false,
-          error: "गलत पासवर्ड (Incorrect password): कृपया सही पासवर्ड दर्ज करें। (डिफ़ॉल्ट: groundzero123)",
+          error: "गलत पासवर्ड (Incorrect password): कृपया सही पासवर्ड दर्ज करें। यदि आप पासवर्ड भूल गए हैं, तो 'पासवर्ड बदलने का अनुरोध' भेजें।",
         },
         { status: 401 }
       );

@@ -1,5 +1,82 @@
 [
   {
+    "userId": "usr-citizen",
+    "userName": "विकास चौधरी (Vikas Choudhary)",
+    "userRole": "CITIZEN_CONTRIBUTOR",
+    "action": "UNAUTHORIZED_ACCESS_ATTEMPT",
+    "entityType": "system",
+    "entityId": "MANAGE_USERS",
+    "details": "User with role 'CITIZEN_CONTRIBUTOR' attempted restricted action requiring 'MANAGE_USERS' on path: /api/users/usr-reporter-narnaul",
+    "id": "log-1790254232428-r0lh",
+    "timestamp": "2026-09-24T12:50:32.428Z"
+  },
+  {
+    "userId": "usr-super-admin",
+    "userName": "राजेश वर्मा (Rajesh Verma)",
+    "userRole": "SUPER_ADMIN",
+    "action": "UPDATE_USER",
+    "entityType": "user",
+    "entityId": "usr-reporter-narnaul",
+    "details": "व्यवस्थापक राजेश वर्मा (Rajesh Verma) ने सदस्य \"नवीन शर्मा (Naveen Sharma)\" की प्रोफ़ाइल/भूमिका अपडेट की (Role: DISTRICT_EDITOR, District: ?????? / Mahendergarh, Status: active)",
+    "id": "log-1790254216078-z617",
+    "timestamp": "2026-09-24T12:50:16.078Z"
+  },
+  {
+    "userId": "usr-reporter-narnaul",
+    "userName": "नवीन शर्मा (Naveen Sharma)",
+    "userRole": "REPORTER",
+    "action": "USER_LOGIN",
+    "entityType": "user",
+    "entityId": "usr-reporter-narnaul",
+    "details": "स्टाफ लॉगिन संपन्न: नवीन शर्मा (Naveen Sharma) (REPORTER) - नारनौल / Narnaul",
+    "id": "log-1790254209037-be1f",
+    "timestamp": "2026-09-24T12:50:09.037Z"
+  },
+  {
+    "userId": "usr-super-admin",
+    "userName": "राजेश वर्मा (Rajesh Verma)",
+    "userRole": "SUPER_ADMIN",
+    "action": "APPROVE_PASSWORD_REQUEST",
+    "entityType": "user",
+    "entityId": "usr-reporter-narnaul",
+    "details": "व्यवस्थापक राजेश वर्मा (Rajesh Verma) ने \"नवीन शर्मा (Naveen Sharma)\" (naveen.reporter@groundzero.media) का पासवर्ड अनुरोध स्वीकृत किया और नया पासवर्ड निर्धारित किया।",
+    "id": "log-1790254208372-i6eg",
+    "timestamp": "2026-09-24T12:50:08.372Z"
+  },
+  {
+    "userId": "usr-reporter-narnaul",
+    "userName": "नवीन शर्मा (Naveen Sharma)",
+    "userRole": "REPORTER",
+    "action": "PASSWORD_RESET_REQUESTED",
+    "entityType": "user",
+    "entityId": "usr-reporter-narnaul",
+    "details": "स्टाफ सदस्य \"नवीन शर्मा (Naveen Sharma)\" (naveen.reporter@groundzero.media, REPORTER) ने पासवर्ड बदलने का अनुरोध भेजा। कारण: Forgot my mobile workstation password",
+    "id": "log-1790254208038-wuwt",
+    "timestamp": "2026-09-24T12:50:08.039Z"
+  },
+  {
+    "userId": "usr-citizen",
+    "userName": "विकास चौधरी (Vikas Choudhary)",
+    "userRole": "CITIZEN_CONTRIBUTOR",
+    "action": "USER_LOGOUT",
+    "entityType": "user",
+    "entityId": "usr-citizen",
+    "details": "स्टाफ लॉगआउट संपन्न: विकास चौधरी (Vikas Choudhary) (CITIZEN_CONTRIBUTOR) सत्र समाप्त।",
+    "id": "log-1790251086289-ts2k",
+    "timestamp": "2026-09-24T11:58:06.289Z"
+  },
+  {
+    "userId": "usr-editor-in-chief",
+    "userName": "अमित कुमार (Amit Kumar)",
+    "userRole": "EDITOR_IN_CHIEF",
+    "action": "USER_LOGIN",
+    "entityType": "user",
+    "entityId": "usr-editor-in-chief",
+    "details": "स्टाफ लॉगिन संपन्न: अमित कुमार (Amit Kumar) (EDITOR_IN_CHIEF) - हरियाणा",
+    "id": "log-1790239207242-ttak",
+    "timestamp": "2026-09-24T08:40:07.242Z"
+  },
+  {
     "userId": "usr-super-admin",
     "userName": "राजेश वर्मा (Rajesh Verma)",
     "userRole": "SUPER_ADMIN",

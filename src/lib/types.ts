@@ -46,6 +46,22 @@ export interface User {
   department?: string;
   permissions?: Permission[];
   createdAt?: string;
+  password?: string;
+}
+
+export interface PasswordResetRequest {
+  id: string;
+  userId: string;
+  userName: string;
+  userEmail: string;
+  userRole: Role;
+  requestedAt: string;
+  status: "PENDING" | "APPROVED" | "REJECTED";
+  reason?: string;
+  adminNotes?: string;
+  resolvedBy?: string;
+  resolvedAt?: string;
+  temporaryPassword?: string;
 }
 
 export type ArticleStatus =
