@@ -1,0 +1,62 @@
+[
+  {
+    "id": "top",
+    "name": "ताज़ा खबरें",
+    "slug": "top"
+  },
+  {
+    "id": "mahendergarh",
+    "name": "महेंद्रगढ़ / नारनौल",
+    "slug": "mahendergarh"
+  },
+  {
+    "id": "rewari",
+    "name": "रेवाड़ी / बावल",
+    "slug": "rewari"
+  },
+  {
+    "id": "gurugram",
+    "name": "गुरुग्राम / मानेसर",
+    "slug": "gurugram"
+  },
+  {
+    "id": "faridabad",
+    "name": "फरीदाबाद / बल्लभगढ़",
+    "slug": "faridabad"
+  },
+  {
+    "id": "nuh",
+    "name": "नूह (मेवात)",
+    "slug": "nuh"
+  },
+  {
+    "id": "palwal",
+    "name": "पलवल / होडल",
+    "slug": "palwal"
+  },
+  {
+    "id": "jhajjar",
+    "name": "झज्जर / बहादुरगढ़",
+    "slug": "jhajjar"
+  },
+  {
+    "id": "charkhi-dadri",
+    "name": "चरखी दादरी / बाढड़ा",
+    "slug": "charkhi-dadri"
+  },
+  {
+    "id": "mandi-bhav",
+    "name": "कृषि व मंडी भाव",
+    "slug": "mandi-bhav"
+  },
+  {
+    "id": "ahirwal",
+    "name": "अहीरवाल हलचल",
+    "slug": "ahirwal"
+  },
+  {
+    "id": "south-haryana",
+    "name": "साउथ हरियाणा विशेष",
+    "slug": "south-haryana"
+  }
+]

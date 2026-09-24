@@ -1,0 +1,12 @@
+{
+  "id": "live-stream-main",
+  "channelName": "GROUND ZERO LIVE 24x7 (साउथ हरियाणा न्यूज़)",
+  "isLive": true,
+  "streamUrl": "https://www.youtube.com/embed/dewccxNzJbU?autoplay=1&mute=1",
+  "streamType": "youtube",
+  "currentProgram": "साउथ हरियाणा 8 PM प्राइम बुलेटिन",
+  "currentHost": "अमित कुमार (वरिष्ठ संपादक)",
+  "upcomingProgram": "ग्राउंड ज़ीरो स्पेशल डिबेट: अहीरवाल का विकास और जनमुद्दे",
+  "viewerCount": 16420,
+  "crawlTickerText": "ग्राउंड ज़ीरो एक्सक्लूसिव: नारनौल मेडिकल कॉलेज में 100 नए डॉक्टरों की तैनाती | रेवाड़ी-धारूहेड़ा-गुरुग्राम नए एलिवेटेड हाईवे को मिली मंजूरी | दक्षिण हरियाणा की मंडियों में सरसों के भाव ₹5,780 तक पहुंचे | मेवात पेयजल योजना का कार्य 80% पूरा"
+}

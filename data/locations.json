@@ -1,0 +1,309 @@
+[
+  {
+    "id": "loc-hr",
+    "name": "Haryana",
+    "nameHi": "हरियाणा",
+    "slug": "haryana",
+    "type": "state"
+  },
+  {
+    "id": "loc-mgarh",
+    "name": "Mahendergarh",
+    "nameHi": "महेंद्रगढ़",
+    "slug": "mahendergarh",
+    "type": "district",
+    "parentId": "loc-hr",
+    "state": "Haryana",
+    "newsCount": 32
+  },
+  {
+    "id": "loc-rewari",
+    "name": "Rewari",
+    "nameHi": "रेवाड़ी",
+    "slug": "rewari",
+    "type": "district",
+    "parentId": "loc-hr",
+    "state": "Haryana",
+    "newsCount": 28
+  },
+  {
+    "id": "loc-ggn",
+    "name": "Gurugram",
+    "nameHi": "गुरुग्राम",
+    "slug": "gurugram",
+    "type": "district",
+    "parentId": "loc-hr",
+    "state": "Haryana",
+    "newsCount": 35
+  },
+  {
+    "id": "loc-fbd",
+    "name": "Faridabad",
+    "nameHi": "फरीदाबाद",
+    "slug": "faridabad",
+    "type": "district",
+    "parentId": "loc-hr",
+    "state": "Haryana",
+    "newsCount": 26
+  },
+  {
+    "id": "loc-nuh",
+    "name": "Nuh (Mewat)",
+    "nameHi": "नूह (मेवात)",
+    "slug": "nuh",
+    "type": "district",
+    "parentId": "loc-hr",
+    "state": "Haryana",
+    "newsCount": 20
+  },
+  {
+    "id": "loc-palwal",
+    "name": "Palwal",
+    "nameHi": "पलवल",
+    "slug": "palwal",
+    "type": "district",
+    "parentId": "loc-hr",
+    "state": "Haryana",
+    "newsCount": 18
+  },
+  {
+    "id": "loc-dadri",
+    "name": "Charkhi Dadri",
+    "nameHi": "चरखी दादरी",
+    "slug": "charkhi-dadri",
+    "type": "district",
+    "parentId": "loc-hr",
+    "state": "Haryana",
+    "newsCount": 15
+  },
+  {
+    "id": "loc-jhajjar",
+    "name": "Jhajjar",
+    "nameHi": "झज्जर",
+    "slug": "jhajjar",
+    "type": "district",
+    "parentId": "loc-hr",
+    "state": "Haryana",
+    "newsCount": 17
+  },
+  {
+    "id": "loc-narnaul",
+    "name": "Narnaul",
+    "nameHi": "नारनौल",
+    "slug": "narnaul",
+    "type": "city",
+    "parentId": "loc-mgarh",
+    "district": "Mahendergarh",
+    "state": "Haryana",
+    "newsCount": 22
+  },
+  {
+    "id": "loc-ateli",
+    "name": "Ateli",
+    "nameHi": "अटेली",
+    "slug": "ateli",
+    "type": "tehsil",
+    "parentId": "loc-mgarh",
+    "district": "Mahendergarh",
+    "state": "Haryana",
+    "newsCount": 11
+  },
+  {
+    "id": "loc-kanina",
+    "name": "Kanina",
+    "nameHi": "कनीना",
+    "slug": "kanina",
+    "type": "tehsil",
+    "parentId": "loc-mgarh",
+    "district": "Mahendergarh",
+    "state": "Haryana",
+    "newsCount": 9
+  },
+  {
+    "id": "loc-nangal-choudhary",
+    "name": "Nangal Choudhary",
+    "nameHi": "नांगल चौधरी",
+    "slug": "nangal-choudhary",
+    "type": "tehsil",
+    "parentId": "loc-mgarh",
+    "district": "Mahendergarh",
+    "state": "Haryana",
+    "newsCount": 8
+  },
+  {
+    "id": "loc-rewari-city",
+    "name": "Rewari City",
+    "nameHi": "रेवाड़ी शहर",
+    "slug": "rewari-city",
+    "type": "city",
+    "parentId": "loc-rewari",
+    "district": "Rewari",
+    "state": "Haryana",
+    "newsCount": 18
+  },
+  {
+    "id": "loc-bawal",
+    "name": "Bawal",
+    "nameHi": "बावल",
+    "slug": "bawal",
+    "type": "tehsil",
+    "parentId": "loc-rewari",
+    "district": "Rewari",
+    "state": "Haryana",
+    "newsCount": 14
+  },
+  {
+    "id": "loc-dharuhera",
+    "name": "Dharuhera",
+    "nameHi": "धारूहेड़ा",
+    "slug": "dharuhera",
+    "type": "city",
+    "parentId": "loc-rewari",
+    "district": "Rewari",
+    "state": "Haryana",
+    "newsCount": 12
+  },
+  {
+    "id": "loc-kosli",
+    "name": "Kosli",
+    "nameHi": "कोसली",
+    "slug": "kosli",
+    "type": "tehsil",
+    "parentId": "loc-rewari",
+    "district": "Rewari",
+    "state": "Haryana",
+    "newsCount": 10
+  },
+  {
+    "id": "loc-manesar",
+    "name": "Manesar",
+    "nameHi": "मानेसर",
+    "slug": "manesar",
+    "type": "city",
+    "parentId": "loc-ggn",
+    "district": "Gurugram",
+    "state": "Haryana",
+    "newsCount": 16
+  },
+  {
+    "id": "loc-sohna",
+    "name": "Sohna",
+    "nameHi": "सोहना",
+    "slug": "sohna",
+    "type": "tehsil",
+    "parentId": "loc-ggn",
+    "district": "Gurugram",
+    "state": "Haryana",
+    "newsCount": 13
+  },
+  {
+    "id": "loc-pataudi",
+    "name": "Pataudi",
+    "nameHi": "पटौदी",
+    "slug": "pataudi",
+    "type": "tehsil",
+    "parentId": "loc-ggn",
+    "district": "Gurugram",
+    "state": "Haryana",
+    "newsCount": 11
+  },
+  {
+    "id": "loc-ballabhgarh",
+    "name": "Ballabhgarh",
+    "nameHi": "बल्लभगढ़",
+    "slug": "ballabhgarh",
+    "type": "city",
+    "parentId": "loc-fbd",
+    "district": "Faridabad",
+    "state": "Haryana",
+    "newsCount": 15
+  },
+  {
+    "id": "loc-tauru",
+    "name": "Tauru",
+    "nameHi": "तावडू",
+    "slug": "tauru",
+    "type": "tehsil",
+    "parentId": "loc-nuh",
+    "district": "Nuh (Mewat)",
+    "state": "Haryana",
+    "newsCount": 9
+  },
+  {
+    "id": "loc-hodal",
+    "name": "Hodal",
+    "nameHi": "होडल",
+    "slug": "hodal",
+    "type": "tehsil",
+    "parentId": "loc-palwal",
+    "district": "Palwal",
+    "state": "Haryana",
+    "newsCount": 8
+  },
+  {
+    "id": "loc-hathin",
+    "name": "Hathin",
+    "nameHi": "हथीन",
+    "slug": "hathin",
+    "type": "tehsil",
+    "parentId": "loc-palwal",
+    "district": "Palwal",
+    "state": "Haryana",
+    "newsCount": 7
+  },
+  {
+    "id": "loc-punhana",
+    "name": "Punhana",
+    "nameHi": "पुन्हाना",
+    "slug": "punhana",
+    "type": "tehsil",
+    "parentId": "loc-nuh",
+    "district": "Nuh (Mewat)",
+    "state": "Haryana",
+    "newsCount": 8
+  },
+  {
+    "id": "loc-bahadurgarh",
+    "name": "Bahadurgarh",
+    "nameHi": "बहादुरगढ़",
+    "slug": "bahadurgarh",
+    "type": "city",
+    "parentId": "loc-jhajjar",
+    "district": "Jhajjar",
+    "state": "Haryana",
+    "newsCount": 14
+  },
+  {
+    "id": "loc-beri",
+    "name": "Beri",
+    "nameHi": "बेरी",
+    "slug": "beri",
+    "type": "tehsil",
+    "parentId": "loc-jhajjar",
+    "district": "Jhajjar",
+    "state": "Haryana",
+    "newsCount": 8
+  },
+  {
+    "id": "loc-badhra",
+    "name": "Badhra",
+    "nameHi": "बाढड़ा",
+    "slug": "badhra",
+    "type": "tehsil",
+    "parentId": "loc-dadri",
+    "district": "Charkhi Dadri",
+    "state": "Haryana",
+    "newsCount": 9
+  },
+  {
+    "id": "loc-satnali",
+    "name": "Satnali",
+    "nameHi": "सतनाली",
+    "slug": "satnali",
+    "type": "tehsil",
+    "parentId": "loc-mgarh",
+    "district": "Mahendergarh",
+    "state": "Haryana",
+    "newsCount": 7
+  }
+]

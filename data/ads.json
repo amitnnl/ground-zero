@@ -1,0 +1,44 @@
+[
+  {
+    "id": "ad-lead-1",
+    "advertiserName": "हरियाणा कृषि एवं बागवानी विभाग (South Haryana Desk)",
+    "campaignTitle": "दक्षिण हरियाणा ड्रिप सिंचाई व सोलर पंप पर 75% सब्सिडी योजना 2026",
+    "placement": "header_leaderboard",
+    "imageUrl": "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?auto=format&fit=crop&w=1200&q=80",
+    "targetUrl": "https://agriharyana.gov.in",
+    "startDate": "2026-03-01",
+    "endDate": "2026-12-31",
+    "impressions": 48939,
+    "clicks": 1682,
+    "status": "active",
+    "districtTarget": "South Haryana"
+  },
+  {
+    "id": "ad-side-1",
+    "advertiserName": "राव तुलाराम मेमोरियल सुपर-स्पेशलिटी हॉस्पिटल रेवाड़ी",
+    "campaignTitle": "24x7 इमरजेंसी एवं एडवांस कार्डियक केयर सेंटर रेवाड़ी",
+    "placement": "sidebar_sticky",
+    "imageUrl": "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=600&q=80",
+    "targetUrl": "https://example.com/hospital",
+    "startDate": "2026-02-15",
+    "endDate": "2026-12-31",
+    "impressions": 34150,
+    "clicks": 1120,
+    "status": "active",
+    "districtTarget": "Rewari"
+  },
+  {
+    "id": "ad-article-1",
+    "advertiserName": "आदर्श डिफेंस एकेडमी नारनौल (अहीरवाल)",
+    "campaignTitle": "NDA, CDS, Airforce एवं हरियाणा पुलिस स्पेशल फिजिकल बैच शुरू",
+    "placement": "in_article",
+    "imageUrl": "https://images.unsplash.com/photo-1541829070764-84a7d30dd3f3?auto=format&fit=crop&w=800&q=80",
+    "targetUrl": "https://example.com/defence-academy",
+    "startDate": "2026-03-01",
+    "endDate": "2026-12-31",
+    "impressions": 29400,
+    "clicks": 980,
+    "status": "active",
+    "districtTarget": "Mahendergarh"
+  }
+]

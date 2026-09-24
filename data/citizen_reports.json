@@ -1,0 +1,41 @@
+[
+  {
+    "id": "cit-001",
+    "citizenName": "अनिल यादव (Anil Yadav)",
+    "phone": "+91 94161 88822",
+    "email": "anil.yadav@gmail.com",
+    "district": "महेंद्रगढ़ / Mahendergarh",
+    "locationDetails": "नारनौल - महेंद्रगढ़ मुख्य मार्ग, नजदीक सिहमा मोड़",
+    "category": "नागरिक समस्या / इंफ्रास्ट्रक्चर",
+    "headline": "सिहमा मोड़ के पास सड़क पर 2 फीट गहरा गड्ढा, आए दिन हो रहे बाइक हादसे",
+    "description": "पिछले 15 दिनों से पाइपलाइन डालने के बाद ठेकेदार ने सड़क को खुला छोड़ दिया है। रात के समय रोशनी न होने के कारण कई वाहन चालक चोटिल हो चुके हैं। प्रशासन तुरंत संज्ञान ले।",
+    "mediaUrls": [
+      "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80"
+    ],
+    "status": "assigned_to_reporter",
+    "aiClassification": {
+      "category": "सड़क सुरक्षा / जनसमस्या",
+      "urgencyScore": 82,
+      "summary": "खतरनाक खुला गड्ढा सिहमा मोड़ नारनौल पर दुर्घटना का कारण बन रहा है।"
+    },
+    "assignedReporterId": "usr-reporter-narnaul",
+    "createdAt": "2026-09-22T09:44:07.396Z"
+  },
+  {
+    "id": "cit-002",
+    "citizenName": "सुरेंद्र सैनी (Surender Saini)",
+    "phone": "+91 98120 77711",
+    "district": "रेवाड़ी / Rewari",
+    "locationDetails": "बावल इंडस्ट्रियल एरिया सेक्टर 3",
+    "category": "पर्यावरण / जलभराव",
+    "headline": "फैक्ट्री का केमिकल युक्त पानी सड़कों पर बह रहा, ग्रामीणों में रोष",
+    "description": "बावल सेक्टर 3 के पास नाले ओवरफ्लो होने से दूषित पानी खेतों में घुस रहा है जिससे फसलें खराब हो रही हैं।",
+    "status": "pending_triage",
+    "aiClassification": {
+      "category": "पर्यावरण एवं स्वास्थ्य",
+      "urgencyScore": 78,
+      "summary": "बावल में औद्योगिक अपशिष्ट जलभराव से फसलों को नुकसान की शिकायत।"
+    },
+    "createdAt": "2026-09-22T11:19:07.396Z"
+  }
+]

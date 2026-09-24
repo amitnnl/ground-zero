@@ -1,0 +1,117 @@
+[
+  {
+    "id": "edition-mgarh",
+    "date": "2026-09-24",
+    "formattedDate": "गुरुवार, 24 सितंबर 2026",
+    "editionName": "महेंद्रगढ़ - नारनौल मुख्य संस्करण",
+    "district": "महेंद्रगढ़",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "title": "पेज 1: मुख्य पृष्ठ (दक्षिण हरियाणा एवं नारनौल लीड)",
+        "imageUrl": "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "pageNumber": 2,
+        "title": "पेज 2: नारनौल - अटेली - कनीना प्रादेशिक हलचल",
+        "imageUrl": "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "pageNumber": 3,
+        "title": "पेज 3: अहीरवाल विचार, संपादकीय एवं ग्रामीण चौपाल",
+        "imageUrl": "https://images.unsplash.com/photo-1586339949916-3e9457bef6d3?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "pageNumber": 4,
+        "title": "पेज 4: खेल, रोजगार, कृषि मंडी भाव एवं युवा जगत",
+        "imageUrl": "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=1200&q=80"
+      }
+    ]
+  },
+  {
+    "id": "edition-rewari",
+    "date": "2026-09-24",
+    "formattedDate": "गुरुवार, 24 सितंबर 2026",
+    "editionName": "रेवाड़ी - बावल - धारूहेड़ा औद्योगिक संस्करण",
+    "district": "रेवाड़ी",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "title": "पेज 1: मुख्य पृष्ठ (रेवाड़ी बाईपास व हाईवे विशेष)",
+        "imageUrl": "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "pageNumber": 2,
+        "title": "पेज 2: बावल आईएमटी व धारूहेड़ा डायरी",
+        "imageUrl": "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "pageNumber": 3,
+        "title": "पेज 3: विचार, प्रशासनिक समीक्षा एवं जनसमस्याएं",
+        "imageUrl": "https://images.unsplash.com/photo-1586339949916-3e9457bef6d3?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "pageNumber": 4,
+        "title": "पेज 4: बाजार भाव, रोजगार व खेल",
+        "imageUrl": "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=1200&q=80"
+      }
+    ]
+  },
+  {
+    "id": "edition-ggn-fbd",
+    "date": "2026-09-24",
+    "formattedDate": "गुरुवार, 24 सितंबर 2026",
+    "editionName": "गुरुग्राम - फरीदाबाद मेट्रो संस्करण",
+    "district": "गुरुग्राम",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "title": "पेज 1: मुख्य पृष्ठ (मानेसर - बल्लभगढ़ विकास गाथा)",
+        "imageUrl": "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "pageNumber": 2,
+        "title": "पेज 2: सोहना - पटौदी - पलवल क्षेत्रीय दर्पण",
+        "imageUrl": "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80"
+      }
+    ]
+  },
+  {
+    "id": "edition-dadri-jhajjar",
+    "date": "2026-09-24",
+    "formattedDate": "गुरुवार, 24 सितंबर 2026",
+    "editionName": "चरखी दादरी - झज्जर - बहादुरगढ़ संस्करण",
+    "district": "चरखी दादरी",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "title": "पेज 1: मुख्य पृष्ठ (दादरी-झज्जर प्रादेशिक लीड)",
+        "imageUrl": "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "pageNumber": 2,
+        "title": "पेज 2: बहादुरगढ़ औद्योगिक व ग्रामीण अंचल",
+        "imageUrl": "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80"
+      }
+    ]
+  },
+  {
+    "id": "edition-nuh-palwal",
+    "date": "2026-09-24",
+    "formattedDate": "गुरुवार, 24 सितंबर 2026",
+    "editionName": "नूह (मेवात) - तावडू - पलवल संस्करण",
+    "district": "नूह (मेवात)",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "title": "पेज 1: मुख्य पृष्ठ (मेवात-पलवल विकास व जनसरोकार)",
+        "imageUrl": "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "pageNumber": 2,
+        "title": "पेज 2: तावडू-होडल-हथीन आंचलिक दर्पण",
+        "imageUrl": "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80"
+      }
+    ]
+  }
+]

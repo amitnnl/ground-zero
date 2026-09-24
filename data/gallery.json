@@ -1,0 +1,88 @@
+[
+  {
+    "id": "album-1",
+    "title": "जल महल और ऐतिहासिक बीरबल का छत्ता: नारनौल की स्थापत्य कला",
+    "slug": "narnaul-heritage-monuments",
+    "description": "मुगल और राजपूत वास्तुकला का अनुपम संगम, नारनौल के ऐतिहासिक स्मारकों की एक्सक्लूसिव फोटो गैलरी।",
+    "photographerName": "सुनील यादव (ग्राउंड ज़ीरो फोटो जर्नलिस्ट)",
+    "location": "नारनौल, महेंद्रगढ़",
+    "coverImageUrl": "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=1200&q=80",
+    "createdAt": "2026-09-20T12:16:15.938Z",
+    "photos": [
+      {
+        "id": "p-1",
+        "url": "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=1200&q=80",
+        "caption": "जल महल का मनोरम दृश्य, जल के बीच खड़ा ऐतिहासिक स्थापत्य"
+      },
+      {
+        "id": "p-2",
+        "url": "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80",
+        "caption": "बीरबल के छत्ते की प्राचीन मेहराबें और नक्काशीदार खंभे"
+      },
+      {
+        "id": "p-3",
+        "url": "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1200&q=80",
+        "caption": "ऐतिहासिक बावड़ी की सीढ़ियां और पुरातात्विक संरचना"
+      },
+      {
+        "id": "p-4",
+        "url": "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1200&q=80",
+        "caption": "सूर्यास्त के समय नारनौल किले का मनमोहक क्षितिज"
+      }
+    ]
+  },
+  {
+    "id": "album-2",
+    "title": "दक्षिण हरियाणा का पारंपरिक पशु मेला: कनीना से लोक संस्कृति की रंगीन छटा",
+    "slug": "kanina-traditional-cattle-fair",
+    "description": "अहीरवाल की ग्रामीण संस्कृति, मुर्राह नस्ल की भैंसें और पारंपरिक परिधानों में सजे किसान।",
+    "photographerName": "अमित कुमार (वरिष्ठ संपादक)",
+    "location": "कनीना, महेंद्रगढ़",
+    "coverImageUrl": "https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=1200&q=80",
+    "createdAt": "2026-09-19T12:16:15.938Z",
+    "photos": [
+      {
+        "id": "p-21",
+        "url": "https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=1200&q=80",
+        "caption": "कनीना पशु मेले में चैंपियन मुर्राह भैंसों की प्रतियोगिता"
+      },
+      {
+        "id": "p-22",
+        "url": "https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=1200&q=80",
+        "caption": "पारंपरिक हुक्का चौपाल और ग्रामीण बुजुर्गों की पंचायत"
+      },
+      {
+        "id": "p-23",
+        "url": "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?auto=format&fit=crop&w=1200&q=80",
+        "caption": "मेले में सजी कृषि उपकरणों और हस्तशिल्प की दुकानें"
+      }
+    ]
+  },
+  {
+    "id": "album-3",
+    "title": "रेवाड़ी का हेरिटेज स्टीम लोकोमोटिव शेड: भारतीय रेल का जीवित इतिहास",
+    "slug": "rewari-steam-loco-heritage-shed",
+    "description": "1893 में स्थापित एशिया का एकमात्र कामकाजी स्टीम लोको शेड, जहाँ आज भी छुक-छुक करती हैं ऐतिहासिक भाप गाड़ियां।",
+    "photographerName": "राजेश वर्मा (चीफ एडमिन)",
+    "location": "रेवाड़ी जंक्शन",
+    "coverImageUrl": "https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&w=1200&q=80",
+    "createdAt": "2026-09-18T12:16:15.938Z",
+    "photos": [
+      {
+        "id": "p-31",
+        "url": "https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&w=1200&q=80",
+        "caption": "अकबर स्टीम इंजन WP 7161 अपने पूर्ण वैभव में"
+      },
+      {
+        "id": "p-32",
+        "url": "https://images.unsplash.com/photo-1513407030348-c983a97b98d8?auto=format&fit=crop&w=1200&q=80",
+        "caption": "विंटेज कंट्रोल पैनल और पीतल के ऐतिहासिक गेज मीटर"
+      },
+      {
+        "id": "p-33",
+        "url": "https://images.unsplash.com/photo-1509749837427-ac94a2553d0e?auto=format&fit=crop&w=1200&q=80",
+        "caption": "शेड में भाप का दबाव बनाते हुए अनुभवी लोको पायलट"
+      }
+    ]
+  }
+]

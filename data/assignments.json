@@ -1,0 +1,32 @@
+[
+  {
+    "id": "asg-001",
+    "title": "कनीना अनाज मंडी में बाजरा खरीद व्यवस्था का ग्राउंड रियलिटी चेक",
+    "description": "कनीना मंडी में किसानों से बातचीत करें। नमी जांच, बारदाना उपलब्धता और व्यापारियों द्वारा की जा रही खरीद का प्रत्यक्ष जायजा लेकर फोटो और रिपोर्ट भेजें।",
+    "reporterId": "usr-reporter-narnaul",
+    "reporterName": "नवीन शर्मा (Narnaul)",
+    "editorId": "usr-district-editor",
+    "editorName": "सतीश यादव (District Bureau Chief)",
+    "status": "in_progress",
+    "dueDate": "2026-09-23T12:04:07.396Z",
+    "location": "Kanina / Mahendergarh",
+    "category": "कृषि / किसान",
+    "priority": "high",
+    "createdAt": "2026-09-22T09:04:07.396Z"
+  },
+  {
+    "id": "asg-002",
+    "title": "रेवाड़ी-झज्जर रेलवे दोहरीकरण कार्य की प्रगति रिपोर्ट",
+    "description": "रेलवे अधिकारियों से मिलकर नई पटरियों और विद्युतीकरण कार्य के पूर्ण होने की तिथि पर सटीक इनपुट लें।",
+    "reporterId": "usr-reporter-narnaul",
+    "reporterName": "नवीन शर्मा (Narnaul)",
+    "editorId": "usr-editor-in-chief",
+    "editorName": "अमित कुमार (Editor-in-Chief)",
+    "status": "assigned",
+    "dueDate": "2026-09-24T12:04:07.396Z",
+    "location": "Rewari",
+    "category": "साउथ हरियाणा",
+    "priority": "medium",
+    "createdAt": "2026-09-22T06:04:07.396Z"
+  }
+]

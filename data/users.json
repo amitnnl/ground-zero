@@ -1,0 +1,88 @@
+[
+  {
+    "id": "usr-super-admin",
+    "name": "राजेश वर्मा (Rajesh Verma)",
+    "email": "superadmin@groundzero.media",
+    "role": "SUPER_ADMIN",
+    "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=80",
+    "district": "हरियाणा (HQ)",
+    "phone": "+91 98765 43210",
+    "bio": "Chief Executive & Platform Administrator"
+  },
+  {
+    "id": "usr-editor-in-chief",
+    "name": "अमित कुमार (Amit Kumar)",
+    "email": "editor@groundzero.media",
+    "role": "EDITOR_IN_CHIEF",
+    "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+    "district": "हरियाणा",
+    "phone": "+91 98123 45678",
+    "bio": "Editor-in-Chief & Fact Checking Lead"
+  },
+  {
+    "id": "usr-district-editor",
+    "name": "सतीश यादव (Satish Yadav)",
+    "email": "satish.editor@groundzero.media",
+    "role": "DISTRICT_EDITOR",
+    "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
+    "district": "महेंद्रगढ़ / Mahendergarh",
+    "phone": "+91 94160 12345",
+    "bio": "District Bureau Chief, South Haryana"
+  },
+  {
+    "id": "usr-reporter-narnaul",
+    "name": "नवीन शर्मा (Naveen Sharma)",
+    "email": "naveen.reporter@groundzero.media",
+    "role": "REPORTER",
+    "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
+    "district": "नारनौल / Narnaul",
+    "phone": "+91 99912 34567",
+    "bio": "Field Senior Reporter, Narnaul & Ateli"
+  },
+  {
+    "id": "usr-social-lead",
+    "name": "प्रिया राव (Priya Rao)",
+    "email": "social@groundzero.media",
+    "role": "SOCIAL_MEDIA_MANAGER",
+    "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80",
+    "district": "डिजिटल डेस्क",
+    "phone": "+91 97280 88888",
+    "bio": "Social Media Command Center Lead"
+  },
+  {
+    "id": "usr-citizen",
+    "name": "विकास चौधरी (Vikas Choudhary)",
+    "email": "vikas.citizen@gmail.com",
+    "role": "CITIZEN_CONTRIBUTOR",
+    "avatar": "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=200&q=80",
+    "district": "रेवाड़ी / Rewari",
+    "phone": "+91 98960 99999",
+    "bio": "Community Journalist & Active Citizen"
+  },
+  {
+    "name": "विशाल यादव (Jhajjar Bureau)",
+    "email": "vishal.jhajjar@groundzero.com",
+    "role": "REPORTER",
+    "district": "झज्जर / Jhajjar",
+    "phone": "+91 98960 55551",
+    "bio": "Senior Jhajjar & Bahadurgarh Bureau Correspondent",
+    "department": "Bureau",
+    "status": "active",
+    "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80",
+    "id": "usr-1790130449357",
+    "createdAt": "2026-09-23T02:27:29.357Z"
+  },
+  {
+    "name": "दिनेश सांगवान (Charkhi Dadri Bureau)",
+    "email": "dinesh.dadri@groundzero.com",
+    "role": "REPORTER",
+    "district": "चरखी दादरी / Charkhi Dadri",
+    "phone": "+91 98960 55552",
+    "bio": "Charkhi Dadri & Badhra Field Reporter",
+    "department": "Bureau",
+    "status": "active",
+    "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=200&q=80",
+    "id": "usr-1790130468843",
+    "createdAt": "2026-09-23T02:27:48.843Z"
+  }
+]
