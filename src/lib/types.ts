@@ -366,4 +366,96 @@ export interface PushSubscription {
   createdAt: string;
 }
 
+export interface SiteSettings {
+  site_name: string;
+  site_tagline: string;
+  site_description: string;
+  site_logo: string | null;
+  site_favicon: string | null;
+  contact_email: string;
+  contact_phone: string;
+  contact_address: string;
+
+  // SEO & Meta
+  default_meta_title: string;
+  default_meta_description: string;
+  default_meta_keywords: string;
+  google_search_console_verification: string | null;
+  bing_webmaster_verification: string | null;
+
+  // Open Graph
+  og_image: string | null;
+  og_site_name: string;
+
+  // Robots & Sitemap
+  robots_txt: string;
+  sitemap_enabled: boolean;
+
+  // Social Links
+  facebook_url: string | null;
+  twitter_url: string | null;
+  youtube_url: string | null;
+  instagram_url: string | null;
+  whatsapp_channel_url: string | null;
+  telegram_url: string | null;
+  koo_url: string | null;
+  sharechat_url: string | null;
+
+  // Tracking Codes
+  gtm_id: string | null;
+  ga4_id: string | null;
+  clarity_id: string | null;
+  facebook_pixel_id: string | null;
+
+  // AdSense & Ads
+  adsense_publisher_id: string | null;
+  adsense_enabled: boolean;
+  ads_enabled: boolean;
+  ads_between_paragraphs: boolean;
+
+  // Push Notifications
+  web_push_enabled: boolean;
+  onesignal_app_id: string | null;
+  onesignal_enabled: boolean;
+  vapid_public_key: string | null;
+
+  // Brand Colors & Theme
+  primary_color: string;
+  secondary_color: string;
+  accent_color: string;
+  dark_mode_enabled: boolean;
+  dark_mode_default: boolean;
+
+  // Homepage Sections & Layout
+  homepage_breaking_news_enabled: boolean;
+  homepage_featured_enabled: boolean;
+  homepage_trending_enabled: boolean;
+  homepage_videos_enabled: boolean;
+  homepage_articles_per_page: number;
+  homepage_trending_count: number;
+  homepage_breaking_count: number;
+
+  // Article Defaults
+  comments_enabled_globally: boolean;
+  related_articles_enabled: boolean;
+  related_articles_count: number;
+  reading_time_enabled: boolean;
+  author_bio_enabled: boolean;
+
+  // Watermarking
+  image_watermark_enabled: boolean;
+  watermark_text: string;
+
+  // Mobile Applications
+  play_store_url: string | null;
+  app_store_url: string | null;
+  app_download_banner_enabled: boolean;
+
+  // Maintenance Mode
+  maintenance_mode: boolean;
+  maintenance_message: string;
+  maintenance_end_time: string | null;
+}
+
+
 
