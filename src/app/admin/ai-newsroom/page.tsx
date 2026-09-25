@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -26,12 +26,84 @@ import {
   Search,
   ShieldCheck,
   Star,
+  ImageIcon,
+  UploadCloud,
+  Trash2,
+  RefreshCw,
+  Camera,
+  ExternalLink,
+  Eye,
+  Wand2,
+  Plus,
+  X,
 } from "lucide-react";
 import { useAuth } from "@/lib/authContext";
 import { useLanguage } from "@/lib/languageContext";
 import HumanVerificationModal from "@/components/HumanVerificationModal";
 import PermissionGuard from "@/components/PermissionGuard";
 import { Article } from "@/lib/types";
+
+// Curated South Haryana beat presets for news photography
+const SOUTH_HARYANA_IMAGE_PRESETS = [
+  {
+    id: "highway",
+    name: "रेवाड़ी-गुरुग्राम हाईवे / NH-48",
+    nameEn: "Rewari-Gurugram Highway",
+    url: "https://images.unsplash.com/photo-1590486803833-1c5dc8ddd4c8?auto=format&fit=crop&w=1200&q=80",
+    caption: "रेवाड़ी-गुरुग्राम राष्ट्रीय राजमार्ग एवं आधुनिक हाईवे कॉरिडोर का दृश्य",
+    credit: "ग्राउंड ज़ीरो ब्यूरो",
+  },
+  {
+    id: "hospital",
+    name: "नारनौल अस्पताल / स्वास्थ्य",
+    nameEn: "Narnaul Civil Hospital",
+    url: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=1200&q=80",
+    caption: "नारनौल नागरिक अस्पताल एवं नवनिर्मित अत्याधुनिक ट्रॉमा सेंटर परिसर",
+    credit: "विशेष संवाददाता",
+  },
+  {
+    id: "mandi",
+    name: "अनाज मंडी / किसान",
+    nameEn: "Grain Mandi / Agriculture",
+    url: "https://images.unsplash.com/photo-1595974482597-4b8da8879bc5?auto=format&fit=crop&w=1200&q=80",
+    caption: "नई अनाज मंडी में फसल की आवक व न्यूनतम समर्थन मूल्य पर खरीद कार्य",
+    credit: "ग्राउंड ज़ीरो ब्यूरो",
+  },
+  {
+    id: "admin",
+    name: "प्रशासन / डीसी सचिवालय",
+    nameEn: "DC Office / Secretariat",
+    url: "https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=1200&q=80",
+    caption: "जिला लघु सचिवालय परिसर एवं प्रशासनिक बैठक कक्ष",
+    credit: "डीआईपीआरओ",
+  },
+  {
+    id: "police",
+    name: "हरियाणा पुलिस / सुरक्षा",
+    nameEn: "Haryana Police / Security",
+    url: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1200&q=80",
+    caption: "कानून व्यवस्था बनाए रखने हेतु जिले भर में पुलिस का सघन जांच अभियान",
+    credit: "पुलिस पीआरओ",
+  },
+  {
+    id: "sports",
+    name: "दंगल / कुश्ती खेल",
+    nameEn: "Dangal / Sports Arena",
+    url: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=1200&q=80",
+    caption: "अहीरवाल क्षेत्र में आयोजित पारंपरिक कुश्ती दंगल में दांव-पेंच आजमाते पहलवान",
+    credit: "ग्राउंड ज़ीरो खेल डेस्क",
+  },
+];
+
+const PHOTO_CREDIT_TAGS = [
+  "ग्राउंड ज़ीरो ब्यूरो",
+  "विशेष संवाददाता",
+  "फाइल फोटो",
+  "PTI / भाषा",
+  "ANI",
+  "साभार: सोशल मीडिया",
+  "डीआईपीआरओ हरियाणा",
+];
 
 type Mode = "topic" | "source_text" | "notes" | "url" | "audio";
 
@@ -61,6 +133,15 @@ export default function AINewsroomPage() {
   const [content, setContent] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [imageCaption, setImageCaption] = useState("");
+
+  // Featured Image & Caption Studio State
+  const [imageTab, setImageTab] = useState<"upload" | "url" | "presets">("upload");
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [customUrlInput, setCustomUrlInput] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const [tags, setTags] = useState<string[]>([]);
   const [isBreaking, setIsBreaking] = useState(false);
   const [isLeadStory, setIsLeadStory] = useState(false);
@@ -72,7 +153,118 @@ export default function AINewsroomPage() {
   const [socialVariants, setSocialVariants] = useState<any>(null);
   const [scripts, setScripts] = useState<any>(null);
   const [translations, setTranslations] = useState<any>(null);
-  const [activeToolTab, setActiveToolTab] = useState<"headlines" | "factcheck" | "social" | "scripts" | "translate">("headlines");
+  const [activeToolTab, setActiveToolTab] = useState<"headlines" | "factcheck" | "social" | "scripts" | "translate" | "preview">("headlines");
+
+  const handleImageFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      await processImageFile(file);
+    }
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  const processImageFile = async (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      setUploadError(b("Please select an image file (JPG, PNG, WEBP, GIF, AVIF)", "कृपया केवल फ़ोटो फ़ाइल चुनें (JPG, PNG, WEBP, GIF, AVIF)"));
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      setUploadError(b("Image size must be less than 10MB", "तस्वीर का आकार 10MB से अधिक नहीं होना चाहिए (अधिकतम 10MB)"));
+      return;
+    }
+
+    setIsUploadingImage(true);
+    setUploadError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.url) {
+          setImageUrl(data.url);
+          if (!imageCaption.trim()) {
+            const cleanTitle = title.trim();
+            setImageCaption(cleanTitle ? `${cleanTitle} (फोटो: ग्राउंड ज़ीरो ब्यूरो)` : `घटना स्थल की तस्वीर (फोटो: ग्राउंड ज़ीरो ब्यूरो)`);
+          }
+          setIsUploadingImage(false);
+          return;
+        }
+      }
+
+      // Resilient FileReader data-URL fallback
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const dataUrl = event.target?.result as string;
+        if (dataUrl) {
+          setImageUrl(dataUrl);
+          if (!imageCaption.trim()) {
+            const cleanTitle = title.trim();
+            setImageCaption(cleanTitle ? `${cleanTitle} (फोटो: ग्राउंड ज़ीरो ब्यूरो)` : `घटना स्थल की तस्वीर (फोटो: ग्राउंड ज़ीरो ब्यूरो)`);
+          }
+        }
+        setIsUploadingImage(false);
+      };
+      reader.onerror = () => {
+        setUploadError(b("Failed to read image file", "तस्वीर पढ़ने में त्रुटि हुई"));
+        setIsUploadingImage(false);
+      };
+      reader.readAsDataURL(file);
+    } catch (err) {
+      console.warn("Upload request failed, using data URL fallback:", err);
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const dataUrl = event.target?.result as string;
+        if (dataUrl) {
+          setImageUrl(dataUrl);
+          if (!imageCaption.trim()) {
+            const cleanTitle = title.trim();
+            setImageCaption(cleanTitle ? `${cleanTitle} (फोटो: ग्राउंड ज़ीरो ब्यूरो)` : `घटना स्थल की तस्वीर (फोटो: ग्राउंड ज़ीरो ब्यूरो)`);
+          }
+        }
+        setIsUploadingImage(false);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      await processImageFile(file);
+    }
+  };
+
+  const handleApplyHeadlineAsCaption = () => {
+    if (!title.trim()) {
+      alert("कृपया पहले मुख्य शीर्षक (Headline) दर्ज करें।");
+      return;
+    }
+    setImageCaption(`${title.trim()} (फोटो: ग्राउंड ज़ीरो ब्यूरो)`);
+  };
+
+  const handleAddCredit = (credit: string) => {
+    if (!imageCaption.trim()) {
+      setImageCaption(`घटना स्थल की तस्वीर (फोटो: ${credit})`);
+      return;
+    }
+    if (/\(फोटो:[^)]+\)/.test(imageCaption)) {
+      setImageCaption(imageCaption.replace(/\(फोटो:[^)]+\)/, `(फोटो: ${credit})`));
+    } else {
+      setImageCaption(`${imageCaption.trim()} (फोटो: ${credit})`);
+    }
+  };
 
   const handleGenerate = async () => {
     setIsGenerating(true);
@@ -496,29 +688,280 @@ export default function AINewsroomPage() {
               />
             </div>
 
-            {/* Image Preview & Caption */}
-            {imageUrl && (
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
-                <div className="flex items-center gap-3">
-                  <img
-                    src={imageUrl}
-                    alt="Preview"
-                    className="w-20 h-14 object-cover rounded-lg border border-slate-300 dark:border-slate-700 shrink-0"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <label className="block text-[10px] font-bold text-slate-700 dark:text-slate-300 mb-0.5">
-                      {b("Image Caption:", "तस्वीर कैप्शन (Image Caption):")}
-                    </label>
-                    <input
-                      type="text"
-                      value={imageCaption}
-                      onChange={(e) => setImageCaption(e.target.value)}
-                      className="w-full p-1.5 rounded-lg bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-[11px] text-slate-900 dark:text-slate-200 focus:outline-hidden focus:border-rose-500"
+            {/* Featured Image & Caption Studio */}
+            <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
+              {/* Studio Header */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <span className="p-1 rounded-md bg-rose-500/10 text-rose-600 dark:text-rose-400">
+                    <ImageIcon size={14} />
+                  </span>
+                  <span className="text-[11px] font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wide">
+                    {b("Featured Image & Caption", "मुख्य तस्वीर व कैप्शन (Featured Image & Caption)")}
+                  </span>
+                </div>
+                {imageUrl ? (
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                    <CheckCircle2 size={11} />
+                    {b("Image Attached", "तस्वीर संलग्न")}
+                  </span>
+                ) : (
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
+                    {b("Upload photo from device", "डिवाइस से फोटो अपलोड करें")}
+                  </span>
+                )}
+              </div>
+
+              {/* If Image is attached: Preview & Replace/Remove Toolbar */}
+              {imageUrl ? (
+                <div className="space-y-3">
+                  <div className="relative group rounded-xl overflow-hidden border border-slate-300 dark:border-slate-700 bg-black/5 dark:bg-black/30">
+                    <img
+                      src={imageUrl}
+                      alt="Featured Preview"
+                      className="w-full h-44 object-cover transition-transform duration-300 group-hover:scale-102"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-between p-3 opacity-95">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-black/60 text-white backdrop-blur-xs flex items-center gap-1">
+                          <Camera size={11} className="text-rose-400" />
+                          {imageUrl.startsWith("/uploads/")
+                            ? b("Local Upload", "डिवाइस से अपलोड")
+                            : imageUrl.startsWith("data:")
+                            ? b("Direct Photo", "प्रत्यक्ष फोटो")
+                            : b("Web Image", "वेब तस्वीर")}
+                        </span>
+                        <div className="flex items-center gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() => fileInputRef.current?.click()}
+                            className="px-2.5 py-1 rounded-lg bg-white/90 hover:bg-white text-slate-900 text-[10px] font-bold shadow-xs transition flex items-center gap-1 cursor-pointer"
+                          >
+                            <RefreshCw size={11} />
+                            {b("Replace Photo", "तस्वीर बदलें")}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setImageUrl("");
+                              setUploadError(null);
+                            }}
+                            className="p-1 rounded-lg bg-rose-600/90 hover:bg-rose-600 text-white shadow-xs transition cursor-pointer"
+                            title={b("Remove Image", "तस्वीर हटाएं")}
+                          >
+                            <Trash2 size={12} />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Overlay Caption Preview */}
+                      {imageCaption && (
+                        <div className="text-[11px] text-white/95 font-medium line-clamp-1 bg-black/40 px-2 py-1 rounded backdrop-blur-xs">
+                          📷 {imageCaption}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
+              ) : (
+                /* No Image Attached: 3-Way Picker (Upload / URL / Presets) */
+                <div className="space-y-2.5">
+                  {/* Source Tabs */}
+                  <div className="grid grid-cols-3 gap-1 p-1 bg-slate-200/70 dark:bg-slate-800 rounded-xl text-[11px] font-bold">
+                    <button
+                      type="button"
+                      onClick={() => setImageTab("upload")}
+                      className={`py-1.5 rounded-lg transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                        imageTab === "upload"
+                          ? "bg-white dark:bg-slate-900 text-rose-600 dark:text-rose-400 shadow-xs"
+                          : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                      }`}
+                    >
+                      <UploadCloud size={13} />
+                      <span>{b("Manual Upload", "📁 डिवाइस से अपलोड")}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setImageTab("url")}
+                      className={`py-1.5 rounded-lg transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                        imageTab === "url"
+                          ? "bg-white dark:bg-slate-900 text-rose-600 dark:text-rose-400 shadow-xs"
+                          : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                      }`}
+                    >
+                      <Link2 size={13} />
+                      <span>{b("Image URL", "🌐 वेब लिंक")}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setImageTab("presets")}
+                      className={`py-1.5 rounded-lg transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                        imageTab === "presets"
+                          ? "bg-white dark:bg-slate-900 text-rose-600 dark:text-rose-400 shadow-xs"
+                          : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                      }`}
+                    >
+                      <Sparkles size={13} />
+                      <span>{b("Haryana Presets", "⚡ बीट प्रीसेट्स")}</span>
+                    </button>
+                  </div>
+
+                  {/* Tab 1: Manual File Upload Drag & Drop */}
+                  {imageTab === "upload" && (
+                    <div
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        setIsDragging(true);
+                      }}
+                      onDragLeave={() => setIsDragging(false)}
+                      onDrop={handleDrop}
+                      onClick={() => fileInputRef.current?.click()}
+                      className={`border-2 border-dashed rounded-xl p-5 text-center transition cursor-pointer flex flex-col items-center justify-center gap-2 ${
+                        isDragging
+                          ? "border-rose-500 bg-rose-500/10 dark:bg-rose-500/20"
+                          : "border-slate-300 dark:border-slate-700 hover:border-rose-400 bg-white dark:bg-slate-950/60"
+                      }`}
+                    >
+                      <div className="p-2.5 rounded-full bg-rose-50 dark:bg-rose-500/20 text-rose-600 dark:text-rose-400">
+                        {isUploadingImage ? (
+                          <RefreshCw size={22} className="animate-spin" />
+                        ) : (
+                          <UploadCloud size={22} />
+                        )}
+                      </div>
+                      <div className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                        {isUploadingImage
+                          ? b("Uploading photo to server...", "तस्वीर अपलोड हो रही है...")
+                          : b("Click to upload from device or drag & drop", "फ़ोटो चुनने के लिए क्लिक करें या फ़ाइल ड्रैग करें")}
+                      </div>
+                      <div className="text-[10px] text-slate-500 dark:text-slate-400">
+                        {b("Supports JPG, PNG, WEBP, GIF, AVIF up to 10MB", "JPG, PNG, WEBP, GIF, AVIF (अधिकतम 10MB)")}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Tab 2: Custom Image URL */}
+                  {imageTab === "url" && (
+                    <div className="space-y-2 bg-white dark:bg-slate-950/60 p-3 rounded-xl border border-slate-200 dark:border-slate-800">
+                      <div className="flex gap-2">
+                        <input
+                          type="url"
+                          value={customUrlInput}
+                          onChange={(e) => setCustomUrlInput(e.target.value)}
+                          placeholder="https://images.unsplash.com/... या कोई भी फोटो लिंक"
+                          className="flex-1 p-2 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-rose-500"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (customUrlInput.trim()) {
+                              setImageUrl(customUrlInput.trim());
+                              setCustomUrlInput("");
+                            }
+                          }}
+                          className="px-3 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition cursor-pointer"
+                        >
+                          {b("Apply", "लागू करें")}
+                        </button>
+                      </div>
+                      <div className="text-[10px] text-slate-500 dark:text-slate-400">
+                        {b("Paste photo URL from official sources, PTI, ANI, or Unsplash.", "आधिकारिक स्रोतों, पीटीआई, एएनआई या वेब से फोटो लिंक पेस्ट करें।")}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Tab 3: South Haryana Beat Presets */}
+                  {imageTab === "presets" && (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 bg-white dark:bg-slate-950/60 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800">
+                      {SOUTH_HARYANA_IMAGE_PRESETS.map((preset) => (
+                        <div
+                          key={preset.id}
+                          onClick={() => {
+                            setImageUrl(preset.url);
+                            if (!imageCaption.trim()) {
+                              setImageCaption(preset.caption);
+                            }
+                          }}
+                          className="group relative rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-rose-500 cursor-pointer transition text-left"
+                        >
+                          <img
+                            src={preset.url}
+                            alt={preset.name}
+                            className="w-full h-14 object-cover group-hover:scale-105 transition duration-200"
+                          />
+                          <div className="p-1.5 bg-slate-900/90 text-white">
+                            <div className="text-[10px] font-bold truncate">{preset.name}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Hidden File Input for Manual Uploading */}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
+                onChange={handleImageFileUpload}
+                className="hidden"
+              />
+
+              {/* Upload Error Banner */}
+              {uploadError && (
+                <div className="p-2 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-[11px] font-medium flex items-center gap-1.5">
+                  <AlertTriangle size={13} className="shrink-0" />
+                  <span>{uploadError}</span>
+                </div>
+              )}
+
+              {/* Dedicated Image Caption & Photo Credit Field */}
+              <div className="space-y-1.5 pt-1 border-t border-slate-200 dark:border-slate-800">
+                <div className="flex items-center justify-between">
+                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
+                    <Camera size={13} className="text-rose-500" />
+                    <span>{b("Image Caption & Editorial Credit:", "तस्वीर कैप्शन व फोटो क्रेडिट (Image Caption):")}</span>
+                  </label>
+                  <button
+                    type="button"
+                    onClick={handleApplyHeadlineAsCaption}
+                    className="text-[10px] font-bold text-rose-600 dark:text-rose-400 hover:underline flex items-center gap-1 cursor-pointer"
+                  >
+                    <Wand2 size={10} />
+                    {b("Use Headline as Caption", "शीर्षक से कैप्शन बनाएं")}
+                  </button>
+                </div>
+
+                <textarea
+                  rows={2}
+                  value={imageCaption}
+                  onChange={(e) => setImageCaption(e.target.value)}
+                  placeholder={b(
+                    "e.g. Health officials inspecting new ICU ward at Narnaul Civil Hospital... (Photo: Ground Zero Bureau)",
+                    "उदा: नारनौल नागरिक अस्पताल में नवनिर्मित आईसीयू वार्ड का निरीक्षण करते स्वास्थ्य अधिकारी... (फोटो: ग्राउंड ज़ीरो ब्यूरो)"
+                  )}
+                  className="w-full p-2.5 rounded-xl bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-hidden focus:border-rose-500 leading-relaxed"
+                />
+
+                {/* Quick 1-Click Photo Credit Pills */}
+                <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
+                  <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">
+                    {b("Quick Credit:", "क्विक क्रेडिट:")}
+                  </span>
+                  {PHOTO_CREDIT_TAGS.map((tag) => (
+                    <button
+                      key={tag}
+                      type="button"
+                      onClick={() => handleAddCredit(tag)}
+                      className="text-[10px] px-2 py-0.5 rounded-md bg-slate-200/70 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium transition cursor-pointer"
+                    >
+                      + {tag}
+                    </button>
+                  ))}
+                </div>
               </div>
-            )}
+            </div>
 
             {/* Editorial Placement & Priority Toggles */}
             <div className="flex flex-wrap items-center justify-between gap-3 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs">
@@ -646,6 +1089,17 @@ export default function AINewsroomPage() {
                 }`}
               >
                 {b("English Translation", "अंग्रेजी अनुवाद")}
+              </button>
+              <button
+                onClick={() => setActiveToolTab("preview")}
+                className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition cursor-pointer flex items-center gap-1 ${
+                  activeToolTab === "preview"
+                    ? "bg-rose-600 text-white shadow-xs"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                }`}
+              >
+                <Eye size={12} />
+                {b("Live Preview", "लाइव पूर्वावलोकन")}
               </button>
             </div>
 
@@ -843,6 +1297,83 @@ export default function AINewsroomPage() {
                     {b("Generate an AI draft first to view English translations.", "अंग्रेज़ी अनुवाद देखने के लिए पहले AI ड्राफ्ट जनरेट करें।")}
                   </div>
                 )}
+              </div>
+            )}
+
+            {activeToolTab === "preview" && (
+              <div className="space-y-3 text-xs">
+                <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3 shadow-xs">
+                  {/* Category & Badges */}
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <span className="text-[10px] font-black px-2 py-0.5 rounded bg-rose-600 text-white uppercase tracking-wider">
+                      {category || "साउथ हरियाणा"}
+                    </span>
+                    <div className="flex items-center gap-1.5 text-[10px]">
+                      {isBreaking && (
+                        <span className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-600 dark:text-rose-400 font-bold border border-rose-500/30 flex items-center gap-1">
+                          <Flame size={10} /> {b("BREAKING", "ताज़ा ब्रेकिंग")}
+                        </span>
+                      )}
+                      {isLeadStory && (
+                        <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold border border-amber-500/30 flex items-center gap-1">
+                          <Star size={10} /> {b("TOP STORY", "मुख्य खबर")}
+                        </span>
+                      )}
+                      <span className="text-slate-500 dark:text-slate-400 font-medium">
+                        📍 {district || "महेंद्रगढ़"}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Headline & Subtitle */}
+                  <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white leading-snug">
+                    {title || b("Headline will appear here...", "समाचार का मुख्य शीर्षक...")}
+                  </h3>
+                  {subtitle && (
+                    <div className="text-xs text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
+                      {subtitle}
+                    </div>
+                  )}
+
+                  {/* Featured Image with Editorial Caption */}
+                  {imageUrl ? (
+                    <div className="rounded-xl overflow-hidden border border-slate-300 dark:border-slate-700 bg-black/5 dark:bg-black/30">
+                      <img
+                        src={imageUrl}
+                        alt={imageCaption || title || "Preview"}
+                        className="w-full h-44 object-cover"
+                      />
+                      {imageCaption ? (
+                        <div className="p-2.5 bg-slate-100 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 text-[11px] text-slate-700 dark:text-slate-300 italic flex items-start gap-1.5">
+                          <Camera size={13} className="text-rose-500 shrink-0 mt-0.5" />
+                          <span>फोटो विवरण: {imageCaption}</span>
+                        </div>
+                      ) : (
+                        <div className="p-2 bg-slate-100 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 text-[10px] text-slate-400 italic">
+                          {b("(No image caption added)", "(कोई फोटो कैप्शन नहीं लिखा गया)")}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="p-6 text-center rounded-xl border border-dashed border-slate-300 dark:border-slate-700 bg-slate-100/50 dark:bg-slate-950/40 text-slate-400 text-xs">
+                      {b("No image attached yet. Upload photo in Editor pane.", "कोई तस्वीर संलग्न नहीं है। एडिटर में फोटो अपलोड करें।")}
+                    </div>
+                  )}
+
+                  {/* Byline */}
+                  <div className="text-[10px] text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-800 pt-2 flex items-center justify-between">
+                    <span>✍️ {currentUser.name} (AI Assisted Desk)</span>
+                    <span>{b("Live Article Preview", "लाइव पूर्वावलोकन")}</span>
+                  </div>
+
+                  {/* Excerpt */}
+                  {excerpt && (
+                    <div className="p-2.5 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 text-[11px] leading-relaxed font-serif">
+                      <span className="font-bold text-slate-900 dark:text-white mr-1">सारांश:</span>
+                      {excerpt}
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>

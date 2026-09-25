@@ -43,3 +43,6 @@ next-env.d.ts
 # scratch
 scratch/
 
+# user uploaded media
+/public/uploads/*
+!/public/uploads/.gitkeep

@@ -192,14 +192,32 @@ export default function HumanVerificationModal({
         </div>
 
         {/* Article Summary Box */}
-        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-xs space-y-1">
-          <div className="text-[10px] font-bold text-slate-500 dark:text-slate-400">{b("News Headline:", "समाचार शीर्षक:")}</div>
-          <div className="text-slate-900 dark:text-white font-bold text-sm">{article.title}</div>
-          <div className="text-slate-500 dark:text-slate-400 text-[11px] pt-1">
-            {b("Category:", "श्रेणी:")} <span className="text-rose-600 dark:text-rose-400 font-semibold">{article.category}</span> • {b("Region:", "क्षेत्र:")}{" "}
-            <span className="text-slate-900 dark:text-white">{article.district || b("Haryana", "हरियाणा")}</span> • {b("Author:", "लेखक:")}{" "}
-            <span className="text-slate-700 dark:text-slate-300">{article.author}</span>
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-xs space-y-2">
+          <div>
+            <div className="text-[10px] font-bold text-slate-500 dark:text-slate-400">{b("News Headline:", "समाचार शीर्षक:")}</div>
+            <div className="text-slate-900 dark:text-white font-bold text-sm">{article.title}</div>
+            <div className="text-slate-500 dark:text-slate-400 text-[11px] pt-1">
+              {b("Category:", "श्रेणी:")} <span className="text-rose-600 dark:text-rose-400 font-semibold">{article.category}</span> • {b("Region:", "क्षेत्र:")}{" "}
+              <span className="text-slate-900 dark:text-white">{article.district || b("Haryana", "हरियाणा")}</span> • {b("Author:", "लेखक:")}{" "}
+              <span className="text-slate-700 dark:text-slate-300">{article.author}</span>
+            </div>
           </div>
+
+          {article.imageUrl && (
+            <div className="flex items-center gap-3 p-2.5 rounded-lg bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+              <img
+                src={article.imageUrl}
+                alt="Preview"
+                className="w-16 h-12 object-cover rounded-md border border-slate-300 dark:border-slate-700 shrink-0"
+              />
+              <div className="min-w-0 text-[11px]">
+                <div className="text-[10px] font-bold text-slate-400 uppercase">{b("Image Caption:", "संलग्न फोटो विवरण:")}</div>
+                <div className="text-slate-800 dark:text-slate-200 font-medium truncate">
+                  {article.imageCaption || b("(No caption attached)", "(कोई कैप्शन नहीं)")}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Step 3: Evidence & Sources Vault */}

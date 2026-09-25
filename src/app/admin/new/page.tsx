@@ -13,6 +13,8 @@ import {
   CheckCircle,
   Wand2,
   Share2,
+  UploadCloud,
+  Camera,
 } from "lucide-react";
 import SocialSyndicationModal from "@/components/SocialSyndicationModal";
 import { SocialPostPayload } from "@/lib/socialFormatter";
@@ -53,6 +55,33 @@ function ArticleForm() {
     "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=1200&q=80"
   );
   const [imageCaption, setImageCaption] = useState("");
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  const handleManualUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingImage(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.url) {
+          setImageUrl(data.url);
+          if (!imageCaption) {
+            setImageCaption(title ? `${title} (फोटो: ग्राउंड ज़ीरो ब्यूरो)` : "घटना स्थल की तस्वीर (फोटो: ग्राउंड ज़ीरो ब्यूरो)");
+          }
+        }
+      }
+    } catch (err) {
+      console.error("Upload error:", err);
+    } finally {
+      setUploadingImage(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
   const [youtubeId, setYoutubeId] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [content, setContent] = useState("");
@@ -469,21 +498,52 @@ function ArticleForm() {
           </div>
         </div>
 
-        {/* Image URL & Caption */}
-        <div className="space-y-2">
-          <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase flex items-center gap-1.5">
-            <ImageIcon size={14} className="text-[#d90000]" />
-            <span>{b("Featured Image URL", "मुख्य फोटो URL (Featured Image)")}</span>
-          </label>
-          <input
-            type="url"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-            placeholder="https://images.unsplash.com/..."
-            className="w-full px-3 py-2 text-xs bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:outline-none focus:border-[#d90000]"
-            required
-          />
-          <div className="flex items-center gap-2 flex-wrap">
+        {/* Image URL, Manual Upload & Caption */}
+        <div className="space-y-2 p-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl">
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase flex items-center gap-1.5">
+              <ImageIcon size={14} className="text-[#d90000]" />
+              <span>{b("Featured Image & Caption", "मुख्य फोटो व कैप्शन (Featured Image & Caption)")}</span>
+            </label>
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploadingImage}
+              className="px-2.5 py-1 rounded-lg bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/60 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border border-rose-200 dark:border-rose-800"
+            >
+              <UploadCloud size={13} className={uploadingImage ? "animate-spin" : ""} />
+              <span>{uploadingImage ? b("Uploading...", "अपलोड हो रहा है...") : b("Upload from Device", "📁 डिवाइस से फोटो अपलोड करें")}</span>
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleManualUpload}
+              className="hidden"
+            />
+          </div>
+
+          {imageUrl && (
+            <div className="flex items-center gap-3 p-2 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+              <img
+                src={imageUrl}
+                alt="Preview"
+                className="w-16 h-12 object-cover rounded-lg border border-slate-300 dark:border-slate-700 shrink-0"
+              />
+              <div className="flex-1 min-w-0">
+                <input
+                  type="url"
+                  value={imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)}
+                  placeholder="https://images.unsplash.com/... या अपलोड करें"
+                  className="w-full px-2.5 py-1.5 text-xs bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:border-[#d90000]"
+                  required
+                />
+              </div>
+            </div>
+          )}
+
+          <div className="flex items-center gap-2 flex-wrap pt-1">
             <span className="text-[11px] text-slate-400">{b("Quick Presets:", "क्विक फोटो सैंपल्स:")}</span>
             <button
               type="button"
@@ -530,13 +590,28 @@ function ArticleForm() {
               {b("Sports", "खेल / कुश्ती")}
             </button>
           </div>
-          <input
-            type="text"
-            value={imageCaption}
-            onChange={(e) => setImageCaption(e.target.value)}
-            placeholder={b("Photo Caption / Source Credits", "फोटो विवरण (Image Caption)")}
-            className="w-full px-3 py-1.5 text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-300"
-          />
+
+          <div className="space-y-1 pt-1 border-t border-slate-200 dark:border-slate-800">
+            <div className="flex items-center justify-between">
+              <label className="text-[11px] font-bold text-slate-600 dark:text-slate-400">
+                {b("Image Caption & Credits:", "तस्वीर कैप्शन व फोटो क्रेडिट:")}
+              </label>
+              <button
+                type="button"
+                onClick={() => title && setImageCaption(`${title} (फोटो: ग्राउंड ज़ीरो ब्यूरो)`)}
+                className="text-[10px] text-rose-600 dark:text-rose-400 font-bold hover:underline cursor-pointer"
+              >
+                {b("Use Title as Caption", "शीर्षक से कैप्शन बनाएं")}
+              </button>
+            </div>
+            <input
+              type="text"
+              value={imageCaption}
+              onChange={(e) => setImageCaption(e.target.value)}
+              placeholder={b("Photo Caption / Source Credits (e.g. Photo: Ground Zero Bureau)", "फोटो विवरण (उदा: फोटो: ग्राउंड ज़ीरो ब्यूरो)")}
+              className="w-full px-3 py-1.5 text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-300"
+            />
+          </div>
         </div>
 
         {/* YouTube Video ID (Optional) */}
