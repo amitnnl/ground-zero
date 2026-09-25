@@ -34,10 +34,12 @@ import {
 } from "lucide-react";
 import PermissionGuard from "@/components/PermissionGuard";
 import { useLanguage } from "@/lib/languageContext";
+import { useSettings } from "@/lib/settingsContext";
 import { SiteSettings } from "@/lib/types";
 
 export default function AdminSettingsPage() {
   const { b } = useLanguage();
+  const { updateSettingsState } = useSettings();
   const [activeTab, setActiveTab] = useState<
     "identity" | "seo" | "social" | "monetization" | "appearance" | "articles" | "maintenance"
   >("identity");
@@ -194,6 +196,7 @@ export default function AdminSettingsPage() {
         const data = await res.json();
         if (data.success) {
           setSaved(true);
+          updateSettingsState(settings);
           setTimeout(() => setSaved(false), 3500);
         } else {
           setErrorMessage(data.error || "सेटिंग्स सहेजने में विफल।");

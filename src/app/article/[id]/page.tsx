@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { getArticleByIdOrSlug, getArticles, incrementArticleViews } from "@/lib/db";
+import { getArticleByIdOrSlug, getArticles, getSiteSettings, incrementArticleViews } from "@/lib/db";
 import VideoNewsSidebar from "@/components/VideoNewsSidebar";
 import CategorySidebar from "@/components/CategorySidebar";
 import ShareModal from "@/components/ShareModal";
@@ -30,7 +30,11 @@ interface ArticlePageProps {
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { id } = await params;
-  const article = await getArticleByIdOrSlug(id);
+  const [article, allArticles, settings] = await Promise.all([
+    getArticleByIdOrSlug(id),
+    getArticles(),
+    getSiteSettings(),
+  ]);
 
   if (!article) {
     notFound();
@@ -39,10 +43,16 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   // Increment views
   incrementArticleViews(article.id).catch(console.error);
 
-  const allArticles = await getArticles();
-  const relatedArticles = allArticles
-    .filter((a) => a.id !== article.id && a.categorySlug === article.categorySlug)
-    .slice(0, 3);
+  const showRelated = settings.related_articles_enabled !== false;
+  const relatedCount = settings.related_articles_count || 5;
+  const relatedArticles = showRelated
+    ? allArticles
+        .filter((a) => a.id !== article.id && a.categorySlug === article.categorySlug)
+        .slice(0, relatedCount)
+    : [];
+
+  const wordCount = (article.content || "").trim().split(/\s+/).length;
+  const readMinutes = Math.max(1, Math.ceil(wordCount / 180));
 
   let prefix = "";
   let restTitle = article.title;
@@ -71,11 +81,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     ],
     publisher: {
       "@type": "NewsMediaOrganization",
-      name: "GROUND ZERO NEWS",
-      url: "https://groundzero.media",
+      name: settings.site_name || "GROUND ZERO NEWS",
+      url: process.env.NEXT_PUBLIC_SITE_URL || "https://groundzeronews.com",
       logo: {
         "@type": "ImageObject",
-        url: "https://groundzero.media/favicon.ico",
+        url: settings.site_logo || `${process.env.NEXT_PUBLIC_SITE_URL || "https://groundzeronews.com"}/favicon.ico`,
       },
     },
     description: article.excerpt,
@@ -158,6 +168,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 </span>
               </span>
 
+              {settings.reading_time_enabled !== false && (
+                <span className="flex items-center gap-1 text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full font-medium text-[11px]">
+                  <Clock size={11} className="text-[#E11D48]" />
+                  <span>{readMinutes} मिनट पठन</span>
+                </span>
+              )}
+
               {article.views > 0 && (
                 <span className="flex items-center gap-1 text-slate-400 dark:text-slate-500">
                   <Eye size={13} />
@@ -182,6 +199,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               sizes="(max-width: 1024px) 100vw, 850px"
               className="object-cover"
             />
+            {settings.image_watermark_enabled && (
+              <div className="absolute bottom-3 right-3 bg-black/75 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-md shadow-md flex items-center gap-1.5 border border-white/20 select-none pointer-events-none">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#E11D48]" />
+                <span>{settings.watermark_text || "© Ground Zero News"}</span>
+              </div>
+            )}
           </div>
           {article.imageCaption && (
             <p className="text-xs text-slate-500 italic mb-6 px-1">
@@ -230,7 +253,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </div>
 
           {/* In-Article Native Monetization Banner */}
-          <AdBanner placement="in_article" district={article.district} />
+          {settings.ads_enabled !== false && settings.ads_between_paragraphs !== false && (
+            <AdBanner placement="in_article" district={article.district} className="my-6" />
+          )}
 
           {/* Tags */}
           {article.tags && article.tags.length > 0 && (
@@ -253,11 +278,40 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             </div>
           )}
 
+          {/* Author Byline Card */}
+          {settings.author_bio_enabled !== false && (
+            <div className="my-8 p-5 sm:p-6 bg-slate-50 dark:bg-slate-800/60 rounded-3xl border border-slate-200 dark:border-slate-800 flex items-start gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#E11D48] to-[#9F1239] text-white flex items-center justify-center font-black text-base shrink-0 shadow-md">
+                {article.author ? article.author.charAt(0) : "G"}
+              </div>
+              <div className="min-w-0 grow">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h4 className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">
+                    {article.author || "ग्राउंड ज़ीरो ब्यूरो"}
+                  </h4>
+                  <span className="bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <CheckCircle size={10} />
+                    <span>सत्यापित रिपोर्टर</span>
+                  </span>
+                </div>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                  {settings.site_name || "Ground Zero News"} विशेष संवाददाता • साउथ हरियाणा के क्षेत्रीय विकास, जनमुद्दों और निष्पक्ष रिपोर्टिंग के लिए समर्पित।
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Reader Reactions & Comments Desk */}
-          <ArticleReactionsComments articleId={article.id} />
+          {settings.comments_enabled_globally !== false ? (
+            <ArticleReactionsComments articleId={article.id} />
+          ) : (
+            <div className="my-8 p-5 bg-slate-50 dark:bg-slate-800/30 rounded-2xl border border-slate-200 dark:border-slate-800 text-center text-xs text-slate-400">
+              टिप्पणी प्रणाली व्यवस्थापक द्वारा निष्क्रिय की गई है।
+            </div>
+          )}
 
           {/* Related Stories Grid */}
-          {relatedArticles.length > 0 && (
+          {showRelated && relatedArticles.length > 0 && (
             <div className="mt-10 pt-7 border-t-2 border-slate-900 dark:border-slate-700">
               <div className="flex items-center gap-2 mb-4">
                 <Sparkles size={16} className="text-[#E11D48]" />

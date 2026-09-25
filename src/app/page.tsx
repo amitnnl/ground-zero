@@ -7,7 +7,7 @@ import AdBanner from "@/components/AdBanner";
 import MandiBhavWidget from "@/components/MandiBhavWidget";
 import DistrictFilterBar from "@/components/DistrictFilterBar";
 import { Suspense } from "react";
-import { getArticles, getCategories } from "@/lib/db";
+import { getArticles, getCategories, getSiteSettings } from "@/lib/db";
 import { Sparkles, Newspaper, Layers } from "lucide-react";
 import Link from "next/link";
 
@@ -22,14 +22,17 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   const query = resolvedSearchParams?.q;
 
   // Run data queries in parallel
-  const [allArticles, categories] = await Promise.all([
+  const [allArticles, categories, settings] = await Promise.all([
     getArticles({ search: query }),
     getCategories(),
+    getSiteSettings(),
   ]);
 
-  // For Bento Showcase (Top 3 stories when no search query)
-  const bentoArticles = allArticles.slice(0, 3);
-  const streamArticles = query ? allArticles : allArticles.slice(3);
+  // For Bento Showcase (Top 3 stories when no search query and featured enabled)
+  const isFeaturedEnabled = settings.homepage_featured_enabled !== false;
+  const bentoArticles = isFeaturedEnabled ? allArticles.slice(0, 3) : [];
+  const streamLimit = settings.homepage_articles_per_page || 12;
+  const streamArticles = (query ? allArticles : (isFeaturedEnabled ? allArticles.slice(3) : allArticles)).slice(0, streamLimit);
 
   return (
     <div className="container mx-auto px-3 sm:px-4 py-5 sm:py-8 max-w-[1440px]">
@@ -44,8 +47,8 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         </div>
       )}
 
-      {/* 1. Hero Bento Grid Showcase (Only on Homepage without search) */}
-      {!query && bentoArticles.length > 0 && (
+      {/* 1. Hero Bento Grid Showcase (Only on Homepage without search if enabled) */}
+      {!query && isFeaturedEnabled && bentoArticles.length > 0 && (
         <HeroBentoGrid articles={bentoArticles} />
       )}
 

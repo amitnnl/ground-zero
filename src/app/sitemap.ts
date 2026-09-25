@@ -1,8 +1,13 @@
 import { MetadataRoute } from "next";
-import { getArticles, getCategories, getLocations } from "@/lib/db";
+import { getArticles, getCategories, getLocations, getSiteSettings } from "@/lib/db";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://groundzero.media";
+  const settings = await getSiteSettings();
+  if (settings.sitemap_enabled === false) {
+    return [];
+  }
+
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://groundzeronews.com";
 
   // Static core routes
   const staticRoutes: MetadataRoute.Sitemap = [

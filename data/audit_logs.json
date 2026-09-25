@@ -1,5 +1,16 @@
 [
   {
+    "userId": "current-user",
+    "userName": "Administrator",
+    "userRole": "SUPER_ADMIN",
+    "action": "UPDATE_SETTINGS",
+    "entityType": "system",
+    "entityId": "site_settings",
+    "details": "Updated site settings: site_name, site_tagline, site_description, site_logo, site_favicon, contact_email, contact_phone, contact_address, default_meta_title, default_meta_description, default_meta_keywords, google_search_console_verification, bing_webmaster_verification, og_image, og_site_name, robots_txt, sitemap_enabled, facebook_url, twitter_url, youtube_url, instagram_url, whatsapp_channel_url, telegram_url, koo_url, sharechat_url, gtm_id, ga4_id, clarity_id, facebook_pixel_id, adsense_publisher_id, adsense_enabled, ads_enabled, ads_between_paragraphs, web_push_enabled, onesignal_app_id, onesignal_enabled, vapid_public_key, primary_color, secondary_color, accent_color, dark_mode_enabled, dark_mode_default, homepage_breaking_news_enabled, homepage_featured_enabled, homepage_trending_enabled, homepage_videos_enabled, homepage_articles_per_page, homepage_trending_count, homepage_breaking_count, comments_enabled_globally, related_articles_enabled, related_articles_count, reading_time_enabled, author_bio_enabled, image_watermark_enabled, watermark_text, play_store_url, app_store_url, app_download_banner_enabled, maintenance_mode, maintenance_message, maintenance_end_time",
+    "id": "log-1790306868373-soep",
+    "timestamp": "2026-09-25T03:27:48.373Z"
+  },
+  {
     "userId": "usr-super-admin",
     "userName": "Admin Desk",
     "userRole": "SUPER_ADMIN",

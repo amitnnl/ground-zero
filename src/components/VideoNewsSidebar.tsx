@@ -12,42 +12,49 @@ import {
   Sparkles,
 } from "lucide-react";
 import { Article } from "@/lib/types";
+import { useSettings } from "@/lib/settingsContext";
 
 interface VideoNewsSidebarProps {
   articles: Article[];
 }
 
 export default function VideoNewsSidebar({ articles }: VideoNewsSidebarProps) {
+  const { settings } = useSettings();
   const videoArticles = articles.filter((a) => a.youtubeId);
   const activeVideo = videoArticles[0] || null;
   const [isPlaying, setIsPlaying] = useState(false);
 
+  const showVideos = settings.homepage_videos_enabled !== false;
+  const showTrending = settings.homepage_trending_enabled !== false;
+  const trendingCount = settings.homepage_trending_count || 6;
+
   const trendingArticles = [...articles]
     .sort((a, b) => (b.views || 0) - (a.views || 0))
-    .slice(0, 5);
+    .slice(0, trendingCount);
 
   return (
     <aside className="space-y-6">
       {/* 1. Multimedia Video Spotlight (Dark Obsidian Theatre Card) */}
-      <div className="bg-slate-950 rounded-3xl p-4 sm:p-5 text-white shadow-lg border border-slate-800 overflow-hidden">
-        <div className="flex items-center justify-between pb-3.5 mb-3 border-b border-slate-800">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
-            <h3 className="font-black text-xs uppercase tracking-wider text-slate-100 flex items-center gap-1.5">
-              <span>वीडियो बुलेटिन</span>
-              <span className="text-[9px] bg-red-600 text-white px-1.5 py-0.5 rounded font-black">HD</span>
-            </h3>
+      {showVideos && (
+        <div className="bg-slate-950 rounded-3xl p-4 sm:p-5 text-white shadow-lg border border-slate-800 overflow-hidden">
+          <div className="flex items-center justify-between pb-3.5 mb-3 border-b border-slate-800">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+              <h3 className="font-black text-xs uppercase tracking-wider text-slate-100 flex items-center gap-1.5">
+                <span>वीडियो बुलेटिन</span>
+                <span className="text-[9px] bg-red-600 text-white px-1.5 py-0.5 rounded font-black">HD</span>
+              </h3>
+            </div>
+            <a
+              href={settings.youtube_url || "https://youtube.com/@ground_zero_news"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[11px] font-bold text-red-400 hover:text-red-300 transition-colors flex items-center gap-0.5"
+            >
+              <span>YouTube</span>
+              <ChevronRight size={12} />
+            </a>
           </div>
-          <a
-            href="https://youtube.com/@ground_zero_news"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[11px] font-bold text-red-400 hover:text-red-300 transition-colors flex items-center gap-0.5"
-          >
-            <span>YouTube</span>
-            <ChevronRight size={12} />
-          </a>
-        </div>
 
         {activeVideo && (
           <div className="mb-4">
@@ -116,18 +123,20 @@ export default function VideoNewsSidebar({ articles }: VideoNewsSidebarProps) {
           ))}
         </div>
       </div>
+      )}
 
-      {/* 2. Trending Top 5 Stories */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-200/80 dark:border-slate-800 shadow-xs transition-colors">
-        <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100 dark:border-slate-800">
-          <div className="flex items-center gap-2">
-            <TrendingUp size={16} className="text-[#E11D48]" />
-            <h3 className="font-black text-xs uppercase tracking-wider text-slate-900 dark:text-white">
-              ट्रेंडिंग समाचार (Trending)
-            </h3>
+      {/* 2. Trending Stories */}
+      {showTrending && trendingArticles.length > 0 && (
+        <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-200/80 dark:border-slate-800 shadow-xs transition-colors">
+          <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100 dark:border-slate-800">
+            <div className="flex items-center gap-2">
+              <TrendingUp size={16} className="text-[#E11D48]" />
+              <h3 className="font-black text-xs uppercase tracking-wider text-slate-900 dark:text-white">
+                ट्रेंडिंग समाचार (Trending)
+              </h3>
+            </div>
+            <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold">शीर्ष {trendingCount}</span>
           </div>
-          <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold">आज के शीर्ष 5</span>
-        </div>
 
         <div className="space-y-3.5">
           {trendingArticles.map((art, idx) => (
@@ -161,6 +170,7 @@ export default function VideoNewsSidebar({ articles }: VideoNewsSidebarProps) {
           ))}
         </div>
       </div>
+      )}
 
       {/* 3. VIP WhatsApp Community Card */}
       <div className="bg-gradient-to-br from-emerald-800 via-emerald-900 to-teal-950 rounded-3xl p-5 text-white shadow-md border border-emerald-700/50">
@@ -171,13 +181,13 @@ export default function VideoNewsSidebar({ articles }: VideoNewsSidebarProps) {
           </span>
         </div>
         <h4 className="font-extrabold text-base leading-snug mb-1.5">
-          Ground Zero News WhatsApp चैनल
+          {settings.site_name || "Ground Zero News"} WhatsApp चैनल
         </h4>
         <p className="text-xs text-emerald-100 leading-relaxed mb-4">
           साउथ हरियाणा, रेवाड़ी, नारनौल, गुरुग्राम और अहीरवाल की हर बड़ी खबर सीधे अपने मोबाइल पर प्राप्त करें।
         </p>
         <a
-          href="https://whatsapp.com/channel/0029Va9rPwL2ER6m7p2w2504"
+          href={settings.whatsapp_channel_url || "https://whatsapp.com/channel/0029Va9rPwL2ER6m7p2w2504"}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center gap-2 w-full bg-[#25D366] hover:bg-[#1EBE5D] text-slate-950 font-black text-xs py-2.5 rounded-xl transition-all shadow-sm hover:scale-102 cursor-pointer"

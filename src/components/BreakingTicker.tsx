@@ -7,9 +7,10 @@ import { BreakingItem } from "@/lib/types";
 
 interface BreakingTickerProps {
   initialItems?: BreakingItem[];
+  maxCount?: number;
 }
 
-export default function BreakingTicker({ initialItems = [] }: BreakingTickerProps) {
+export default function BreakingTicker({ initialItems = [], maxCount = 5 }: BreakingTickerProps) {
   const [items, setItems] = useState<BreakingItem[]>(initialItems);
 
   useEffect(() => {
@@ -29,9 +30,10 @@ export default function BreakingTicker({ initialItems = [] }: BreakingTickerProp
     }
   }, [initialItems]);
 
-  if (items.length === 0) return null;
+  const limitedItems = items.slice(0, maxCount);
+  if (limitedItems.length === 0) return null;
 
-  const displayList = [...items, ...items, ...items];
+  const displayList = [...limitedItems, ...limitedItems, ...limitedItems];
 
   return (
     <div className="bg-slate-950 text-white border-b border-slate-800">

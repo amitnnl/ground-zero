@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { ExternalLink, Info } from "lucide-react";
 import { AdCampaign } from "@/lib/types";
+import { useSettings } from "@/lib/settingsContext";
 
 interface AdBannerProps {
   placement: AdCampaign["placement"];
@@ -18,6 +19,7 @@ export default function AdBanner({
   className = "",
   fallbackText,
 }: AdBannerProps) {
+  const { settings } = useSettings();
   const [ad, setAd] = useState<AdCampaign | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -68,6 +70,10 @@ export default function AdBanner({
     }).catch(() => {});
   };
 
+  if (settings.ads_enabled === false) {
+    return null;
+  }
+
   if (loading) {
     return (
       <div className={`animate-pulse bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center justify-center p-4 text-xs text-slate-400 ${className}`}>
@@ -77,11 +83,28 @@ export default function AdBanner({
   }
 
   if (!ad) {
+    if (settings.adsense_enabled && settings.adsense_publisher_id) {
+      return (
+        <div className={`w-full my-3 p-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-center overflow-hidden ${className}`}>
+          <span className="text-[10px] text-slate-400 font-bold block mb-1">GOOGLE ADSENSE</span>
+          <ins
+            className="adsbygoogle"
+            style={{ display: "block" }}
+            data-ad-client={settings.adsense_publisher_id}
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          />
+        </div>
+      );
+    }
+
     if (!fallbackText) return null;
     return (
       <div className={`border border-dashed border-slate-300 dark:border-slate-800 rounded-xl p-4 text-center text-xs text-slate-400 ${className}`}>
         <p className="font-semibold text-slate-500 dark:text-slate-400">विज्ञापन स्थान (Ad Space Available)</p>
-        <p className="mt-1">ग्राउंड ज़ीरो नेटवर्क पर लाखों पाठकों तक अपना ब्रांड पहुंचाएं: ads@groundzero.media</p>
+        <p className="mt-1">
+          ग्राउंड ज़ीरो नेटवर्क पर लाखों पाठकों तक अपना ब्रांड पहुंचाएं: {settings.contact_email || "gznarnaul@gmail.com"}
+        </p>
       </div>
     );
   }
