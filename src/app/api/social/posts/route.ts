@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSocialPosts, createSocialPost } from "@/lib/db";
+import { getSocialPosts, createSocialPost, deleteSocialPost } from "@/lib/db";
 
 export async function GET() {
   try {
@@ -23,5 +23,21 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("POST /api/social/posts error:", error);
     return NextResponse.json({ success: false, error: "Failed to create social post" }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+    if (!id) {
+      return NextResponse.json({ success: false, error: "Post ID is required" }, { status: 400 });
+    }
+
+    const success = await deleteSocialPost(id);
+    return NextResponse.json({ success });
+  } catch (error) {
+    console.error("DELETE /api/social/posts error:", error);
+    return NextResponse.json({ success: false, error: "Failed to delete social post" }, { status: 500 });
   }
 }

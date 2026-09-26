@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 import AppProviders from "@/components/AppProviders";
 import SiteLayoutWrapper from "@/components/SiteLayoutWrapper";
@@ -89,9 +90,14 @@ export default async function RootLayout({
           }}
         />
 
-        {/* Google Tag Manager */}
+      </head>
+
+      <body className="min-h-full flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200">
+        {/* Google Tag Manager (Non-blocking Next.js Script) */}
         {settings.gtm_id && (
-          <script
+          <Script
+            id="gtm-script"
+            strategy="afterInteractive"
             dangerouslySetInnerHTML={{
               __html: `
                 (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -107,8 +113,14 @@ export default async function RootLayout({
         {/* Google Analytics 4 */}
         {settings.ga4_id && (
           <>
-            <script async src={`https://www.googletagmanager.com/gtag/js?id=${settings.ga4_id}`} />
-            <script
+            <Script
+              id="ga4-src"
+              strategy="afterInteractive"
+              src={`https://www.googletagmanager.com/gtag/js?id=${settings.ga4_id}`}
+            />
+            <Script
+              id="ga4-config"
+              strategy="afterInteractive"
               dangerouslySetInnerHTML={{
                 __html: `
                   window.dataLayer = window.dataLayer || [];
@@ -123,7 +135,9 @@ export default async function RootLayout({
 
         {/* Microsoft Clarity */}
         {settings.clarity_id && (
-          <script
+          <Script
+            id="clarity-script"
+            strategy="afterInteractive"
             dangerouslySetInnerHTML={{
               __html: `
                 (function(c,l,a,r,i,t,y){
@@ -138,7 +152,9 @@ export default async function RootLayout({
 
         {/* Meta / Facebook Pixel */}
         {settings.facebook_pixel_id && (
-          <script
+          <Script
+            id="fb-pixel"
+            strategy="afterInteractive"
             dangerouslySetInnerHTML={{
               __html: `
                 !function(f,b,e,v,n,t,s)
@@ -158,8 +174,9 @@ export default async function RootLayout({
 
         {/* Google AdSense Script */}
         {settings.adsense_enabled && settings.adsense_publisher_id && (
-          <script
-            async
+          <Script
+            id="adsense-script"
+            strategy="afterInteractive"
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${settings.adsense_publisher_id}`}
             crossOrigin="anonymous"
           />
@@ -168,8 +185,14 @@ export default async function RootLayout({
         {/* OneSignal Web Push SDK */}
         {settings.onesignal_enabled && settings.onesignal_app_id && (
           <>
-            <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer />
-            <script
+            <Script
+              id="onesignal-sdk"
+              strategy="afterInteractive"
+              src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js"
+            />
+            <Script
+              id="onesignal-init"
+              strategy="afterInteractive"
               dangerouslySetInnerHTML={{
                 __html: `
                   window.OneSignalDeferred = window.OneSignalDeferred || [];
@@ -183,9 +206,6 @@ export default async function RootLayout({
             />
           </>
         )}
-      </head>
-
-      <body className="min-h-full flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200">
         {/* Google Tag Manager (noscript fallback) */}
         {settings.gtm_id && (
           <noscript>

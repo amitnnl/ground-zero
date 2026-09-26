@@ -35,15 +35,44 @@ import { Role, Permission } from "@/lib/types";
 import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useLanguage } from "@/lib/languageContext";
+import { useSettings } from "@/lib/settingsContext";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { currentUser, allUsers, switchRole, hasPermission, logout } = useAuth();
   const { lang, t } = useLanguage();
+  const { settings } = useSettings();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [roleDropdownOpen, setRoleDropdownOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  // Dynamically sync browser document title & favicon with Site Settings
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      if (settings.site_name) {
+        document.title = `${settings.site_name} - Newsroom Console`;
+      }
+      if (settings.site_favicon) {
+        let link: HTMLLinkElement | null = document.querySelector("link[rel*='icon']");
+        if (!link) {
+          link = document.createElement("link");
+          link.rel = "shortcut icon";
+          document.head.appendChild(link);
+        }
+        link.href = settings.site_favicon;
+      }
+    }
+  }, [settings.site_name, settings.site_favicon]);
+
+  const brandInitials = React.useMemo(() => {
+    if (!settings.site_name) return "GZ";
+    const parts = settings.site_name.trim().split(/\s+/);
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
+    return settings.site_name.slice(0, 2).toUpperCase();
+  }, [settings.site_name]);
 
   useEffect(() => {
     try {
@@ -135,17 +164,41 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {sidebarCollapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
           </button>
 
-          <Link href="/admin" className="flex items-center gap-2.5">
-            <span className="w-8 h-8 rounded-lg bg-[#E11D48] flex items-center justify-center font-black text-white text-lg tracking-wider shadow-md shrink-0">
-              GZ
-            </span>
+          <Link href="/admin" className="flex items-center gap-2.5 group">
+            {settings.site_logo ? (
+              <img
+                src={settings.site_logo}
+                alt={settings.site_name || "Newsroom"}
+                className="h-8 max-h-8 w-auto max-w-[120px] object-contain rounded-md shrink-0 bg-white/95 dark:bg-slate-900 p-0.5 border border-slate-200 dark:border-slate-800 shadow-xs"
+              />
+            ) : (
+              <span
+                style={{ backgroundColor: settings.primary_color || "#E11D48" }}
+                className="w-8 h-8 rounded-lg flex items-center justify-center font-black text-white text-base tracking-wider shadow-md shrink-0"
+              >
+                {brandInitials}
+              </span>
+            )}
             <div className="hidden sm:block">
               <div className="font-extrabold text-sm sm:text-base tracking-tight flex items-center gap-2 text-slate-900 dark:text-white">
-                GROUND ZERO <span className="text-[#E11D48] text-xs px-2 py-0.5 rounded bg-rose-500/10 border border-rose-500/30">NEWSROOM OS</span>
+                <span className="truncate max-w-[180px] lg:max-w-[260px]">
+                  {settings.site_name || "GROUND ZERO"}
+                </span>
+                <span
+                  style={{
+                    borderColor: `${settings.primary_color || "#E11D48"}40`,
+                    color: settings.primary_color || "#E11D48",
+                  }}
+                  className="text-xs px-2 py-0.5 rounded bg-rose-500/10 font-bold shrink-0"
+                >
+                  NEWSROOM OS
+                </span>
               </div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium tracking-wide flex items-center gap-1">
                 <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                LIVE PRODUCTION • HAR-NEWS-DESK
+                <span className="truncate max-w-[240px]">
+                  {settings.site_tagline || "LIVE PRODUCTION • HAR-NEWS-DESK"}
+                </span>
               </div>
             </div>
           </Link>
@@ -165,7 +218,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               </Link>
               <Link
                 href="/admin/new"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-[#E11D48] text-white hover:bg-rose-700 transition-colors shadow-sm"
+                style={{ backgroundColor: settings.primary_color || "#E11D48" }}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg text-white hover:opacity-90 transition shadow-sm"
               >
                 <PlusCircle size={14} />
                 <span className="hidden sm:inline">{t("btn_write_story")}</span>
@@ -247,6 +301,26 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
       </header>
 
+      {/* Maintenance Mode Alert Banner if active */}
+      {settings.maintenance_mode && (
+        <div className="bg-amber-500 text-slate-950 px-4 py-2 text-xs font-bold flex items-center justify-between shadow-xs z-30">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-red-600 animate-ping"></span>
+            <span>
+              {lang === "hi"
+                ? "⚠️ अलर्ट: मेंटेनेंस मोड सक्रिय है! पब्लिक वेबसाइट पर पाठकों को मेंटेनेंस संदेश दिख रहा है।"
+                : "⚠️ ALERT: Maintenance Mode is ACTIVE! Public visitors are currently seeing the maintenance screen."}
+            </span>
+          </div>
+          <Link
+            href="/admin/settings"
+            className="underline hover:text-white transition ml-2 font-black shrink-0"
+          >
+            {lang === "hi" ? "सेटिंग्स बदलें ›" : "Manage Settings ›"}
+          </Link>
+        </div>
+      )}
+
       {/* Main Studio Body: Sidebar + Main Content */}
       <div className="flex-1 flex overflow-hidden">
         {/* Desktop Sidebar with Collapse / Expand */}
@@ -278,11 +352,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   key={item.href}
                   href={item.href}
                   title={sidebarCollapsed ? item.label : undefined}
+                  style={active ? { backgroundColor: settings.primary_color || "#E11D48" } : undefined}
                   className={`flex items-center ${
                     sidebarCollapsed ? "justify-center py-3 px-2" : "justify-between px-3 py-2.5"
                   } rounded-xl text-xs font-semibold transition-all group relative ${
                     active
-                      ? "bg-[#E11D48] text-white shadow-md shadow-rose-900/30"
+                      ? "text-white shadow-md shadow-rose-900/30"
                       : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900 hover:text-slate-900 dark:hover:text-white"
                   }`}
                 >
@@ -362,12 +437,28 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="lg:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex">
             <div className="w-72 bg-white dark:bg-slate-950 h-full p-4 flex flex-col border-r border-slate-200 dark:border-slate-800">
               <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800 mb-4">
-                <div className="font-black text-sm text-slate-900 dark:text-white">
-                  {lang === "hi" ? "न्यूज़रूम मेन्यू" : "NEWSROOM MENU"}
+                <div className="flex items-center gap-2 overflow-hidden">
+                  {settings.site_logo ? (
+                    <img
+                      src={settings.site_logo}
+                      alt={settings.site_name}
+                      className="h-7 w-auto max-w-[100px] object-contain rounded"
+                    />
+                  ) : (
+                    <span
+                      style={{ backgroundColor: settings.primary_color || "#E11D48" }}
+                      className="w-6 h-6 rounded-md flex items-center justify-center font-bold text-white text-xs"
+                    >
+                      {brandInitials}
+                    </span>
+                  )}
+                  <div className="font-black text-sm text-slate-900 dark:text-white truncate">
+                    {settings.site_name || (lang === "hi" ? "न्यूज़रूम मेन्यू" : "NEWSROOM MENU")}
+                  </div>
                 </div>
                 <button
                   onClick={() => setMobileMenuOpen(false)}
-                  className="p-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
+                  className="p-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 shrink-0 cursor-pointer"
                 >
                   <X size={18} />
                 </button>
@@ -381,9 +472,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                       key={item.href}
                       href={item.href}
                       onClick={() => setMobileMenuOpen(false)}
+                      style={active ? { backgroundColor: settings.primary_color || "#E11D48" } : undefined}
                       className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold ${
                         active
-                          ? "bg-[#E11D48] text-white shadow-md shadow-rose-900/30"
+                          ? "text-white shadow-md shadow-rose-900/30"
                           : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900"
                       }`}
                     >

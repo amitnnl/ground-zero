@@ -14,6 +14,7 @@ import {
   MessageSquare,
   ThumbsUp,
   ExternalLink,
+  Trash2,
 } from "lucide-react";
 import { SocialPost, SocialPlatform } from "@/lib/types";
 import { useAuth } from "@/lib/authContext";
@@ -37,6 +38,9 @@ export default function SocialCommandCenterPage() {
   const [loading, setLoading] = useState(true);
   const [selectedPlatform, setSelectedPlatform] = useState<string>("all");
   const [showComposeModal, setShowComposeModal] = useState(false);
+  const [deleteConfirmPost, setDeleteConfirmPost] = useState<SocialPost | null>(null);
+  const [deletingPost, setDeletingPost] = useState(false);
+  const [notification, setNotification] = useState<string | null>(null);
 
   // Quick compose form
   const [composePlatform, setComposePlatform] = useState<SocialPlatform>("facebook");
@@ -60,6 +64,25 @@ export default function SocialCommandCenterPage() {
       // silent fail
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeletePost = async (id: string) => {
+    setDeletingPost(true);
+    try {
+      const res = await fetch(`/api/social/posts?id=${id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setNotification(b("Social post deleted successfully!", "सोशल पोस्ट सफलतापूर्वक हटा दी गई!"));
+        setTimeout(() => setNotification(null), 3500);
+        setDeleteConfirmPost(null);
+        fetchPosts();
+      }
+    } catch (err) {
+      console.error("Failed to delete social post:", err);
+    } finally {
+      setDeletingPost(false);
     }
   };
 
@@ -124,6 +147,13 @@ export default function SocialCommandCenterPage() {
           </button>
         )}
       </div>
+
+      {notification && (
+        <div className="p-3 bg-emerald-500/20 border border-emerald-500/40 rounded-xl text-emerald-700 dark:text-emerald-300 text-xs font-semibold flex items-center gap-2">
+          <CheckCircle2 size={16} />
+          {notification}
+        </div>
+      )}
 
       {/* 7 Connected Platforms Status Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
@@ -218,15 +248,24 @@ export default function SocialCommandCenterPage() {
                       {post.platform.toUpperCase()}
                     </span>
 
-                    <span
-                      className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                        post.status === "published"
-                          ? "bg-emerald-50 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30"
-                          : "bg-amber-50 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-500/30"
-                      }`}
-                    >
-                      {post.status.toUpperCase()}
-                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <span
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                          post.status === "published"
+                            ? "bg-emerald-50 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30"
+                            : "bg-amber-50 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-500/30"
+                        }`}
+                      >
+                        {post.status.toUpperCase()}
+                      </span>
+                      <button
+                        onClick={() => setDeleteConfirmPost(post)}
+                        className="p-1 rounded-md text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition cursor-pointer"
+                        title={b("Delete Social Post", "सोशल पोस्ट हटाएं")}
+                      >
+                        <Trash2 size={13} />
+                      </button>
+                    </div>
                   </div>
 
                   <p className="text-xs sm:text-sm text-slate-800 dark:text-slate-200 whitespace-pre-wrap leading-relaxed">
@@ -348,6 +387,50 @@ export default function SocialCommandCenterPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Social Post Confirmation Modal */}
+      {deleteConfirmPost && (
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 w-full max-w-md shadow-2xl space-y-4">
+            <div className="flex items-center gap-3 text-rose-600 dark:text-rose-400">
+              <div className="w-10 h-10 rounded-full bg-rose-500/10 flex items-center justify-center shrink-0">
+                <Trash2 size={20} />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                  {b("Delete Social Post", "सोशल पोस्ट हटाएं")}
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  {b("This social dispatch will be removed from your queue.", "यह सोशल पोस्ट आपकी कतार से हटा दी जाएगी।")}
+                </p>
+              </div>
+            </div>
+
+            <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl text-xs font-medium text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700/60 line-clamp-3">
+              {deleteConfirmPost.content}
+            </div>
+
+            <div className="flex items-center justify-end gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => setDeleteConfirmPost(null)}
+                className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+              >
+                {b("Cancel", "रद्द करें")}
+              </button>
+              <button
+                type="button"
+                disabled={deletingPost}
+                onClick={() => handleDeletePost(deleteConfirmPost.id)}
+                className="px-4 py-2 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-500 text-white shadow-sm transition flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+              >
+                <Trash2 size={13} />
+                {deletingPost ? b("Deleting...", "हटाया जा रहा है...") : b("Delete Post", "पोस्ट हटाएं")}
+              </button>
+            </div>
           </div>
         </div>
       )}

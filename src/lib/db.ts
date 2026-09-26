@@ -430,6 +430,14 @@ export async function createSocialPost(
   return newPost;
 }
 
+export async function deleteSocialPost(id: string): Promise<boolean> {
+  const posts = await getSocialPosts();
+  const filtered = posts.filter((p) => p.id !== id);
+  if (filtered.length === posts.length) return false;
+  writeJson(SOCIAL_POSTS_FILE, filtered);
+  return true;
+}
+
 /* =========================================================
    CITIZEN JOURNALISM
 ========================================================= */

@@ -1,5 +1,70 @@
 [
   {
+    "title": "Mahendergarh News | About the Ground Zero News : प्रशासनिक स्तर पर बड़ा फैसला",
+    "slug": "mahendergarh-news-about-the-ground-zero-news-",
+    "excerpt": "महेंद्रगढ़ में About the Ground Zero News को लेकर प्रशासनिक हलचल तेज हो गई है। संबंधित विभाग द्वारा समीक्षा बैठक कर आवश्यक दिशा-निर्देश जारी किए गए हैं।",
+    "content": "महेंद्रगढ़ (ग्राउंड ज़ीरो ब्यूरो): क्षेत्र में About the Ground Zero News के संदर्भ में आज एक उच्चस्तरीय प्रशासनिक समीक्षा की गई। बैठक में जनसुविधाओं, बुनियादी ढांचे और त्वरित समाधान पर विशेष बल दिया गया।\n\nवरिष्ठ प्रशासनिक अधिकारियों ने स्पष्ट किया कि विकास कार्यों एवं सार्वजनिक सेवाओं में किसी भी प्रकार की लापरवाही बर्दाश्त नहीं की जाएगी। संबंधित एजेंसियों को तय समय-सीमा के भीतर कार्य पूरा करने और गुणवत्ता मानकों का कड़ाई से पालन करने का निर्देश दिया गया है।\n\nस्थानीय नागरिकों व सामाजिक प्रतिनिधियों ने इस फैसले पर संतोष व्यक्त करते हुए कहा कि इससे क्षेत्र की पुरानी समस्या का समाधान होगा। ग्राउंड ज़ीरो न्यूज़ की टीम लगातार इस मामले पर नज़र बनाए हुए है।",
+    "category": "साउथ हरियाणा",
+    "categorySlug": "south-haryana",
+    "imageUrl": "/uploads/gz-img-1790388553014-dn6wo4.png",
+    "imageCaption": "जनसंवाद कार्यक्रम के दौरान उपस्थित नागरिक एवं जनसमूह",
+    "isBreaking": false,
+    "isLeadStory": true,
+    "author": "Admin Desk (AI Assisted)",
+    "tags": [
+      "Mahendergarh",
+      "महेंद्रगढ़",
+      "हरियाणा समाचार",
+      "ग्राउंड ज़ीरो"
+    ],
+    "id": "art-1790388557243",
+    "status": "PUBLISHED",
+    "views": 4,
+    "createdAt": "2026-09-26T02:09:17.243Z",
+    "publishedAt": "2026-09-26T02:09:33.439Z",
+    "needsVerification": false,
+    "editorName": "Admin Desk",
+    "verificationAudit": {
+      "verifiedBy": "Admin Desk",
+      "verifiedAt": "2026-09-26T02:09:33.439Z",
+      "checklist": [
+        {
+          "en": "Independent verification of event date, location, and core timeline",
+          "hi": "स्थान, तिथि एवं मूल घटनाक्रम की स्वतंत्र पुष्टि (Event Date & Location Verified)",
+          "claim": "स्थान, तिथि एवं मूल घटनाक्रम की स्वतंत्र पुष्टि (Event Date & Location Verified)",
+          "verified": true
+        },
+        {
+          "en": "Official source / government order / police statement attached",
+          "hi": "आधिकारिक स्रोत / सरकारी आदेश / पुलिस बयान संलग्न (Official Order / Source Attached)",
+          "claim": "आधिकारिक स्रोत / सरकारी आदेश / पुलिस बयान संलग्न (Official Order / Source Attached)",
+          "verified": true
+        },
+        {
+          "en": "Factual confirmation of figures, names, and designations",
+          "hi": "आंकड़ों, नामों और पदों की तथ्यात्मक पुष्टि (Names, Designations & Figures Confirmed)",
+          "claim": "आंकड़ों, नामों और पदों की तथ्यात्मक पुष्टि (Names, Designations & Figures Confirmed)",
+          "verified": true
+        },
+        {
+          "en": "Legal compliance, fairness, and anti-defamation bias check passed",
+          "hi": "कानूनी, निष्पक्षता एवं मानहानि संबंधी पूर्वाग्रह जांच पास (Fairness & Defamation Check Passed)",
+          "claim": "कानूनी, निष्पक्षता एवं मानहानि संबंधी पूर्वाग्रह जांच पास (Fairness & Defamation Check Passed)",
+          "verified": true
+        }
+      ],
+      "evidenceNotes": "उपायुक्त कार्यालय आदेश संख्या DDM/2026/412 एवं ग्राउंड रिपोर्टर की प्रत्यक्ष पुष्टि।"
+    },
+    "distributionRecords": [
+      {
+        "platform": "Website Portal",
+        "status": "published",
+        "timestamp": "2026-09-26T02:09:33.439Z",
+        "externalLink": "/article/mahendergarh-news-about-the-ground-zero-news-"
+      }
+    ]
+  },
+  {
     "id": "rewari-dharuhera-gurugram-expressway",
     "title": "Rewari News | रेवाड़ी-धारूहेड़ा-गुरुग्राम नए एलिवेटेड कॉरिडोर को केंद्र की मंजूरी : ₹3,200 करोड़ की लागत | जाम से मिलेगी मुक्ति, उद्योग को लगेंगे पंख",
     "slug": "rewari-dharuhera-gurugram-elevated-corridor-approved",

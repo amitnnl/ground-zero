@@ -17,6 +17,7 @@ import {
 import { LiveStreamData } from "@/lib/types";
 import PermissionGuard from "@/components/PermissionGuard";
 import { useLanguage } from "@/lib/languageContext";
+import { formatLiveStreamEmbedUrl } from "@/lib/videoUtils";
 
 export default function AdminLiveTVPage() {
   const { b, lang } = useLanguage();
@@ -61,6 +62,9 @@ export default function AdminLiveTVPage() {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    const normalizedUrl = formatLiveStreamEmbedUrl(streamUrl);
+    setStreamUrl(normalizedUrl);
+
     try {
       const res = await fetch("/api/live-tv", {
         method: "PUT",
@@ -68,7 +72,7 @@ export default function AdminLiveTVPage() {
         body: JSON.stringify({
           channelName,
           isLive,
-          streamUrl,
+          streamUrl: normalizedUrl,
           currentProgram,
           currentHost,
           upcomingProgram,
@@ -144,9 +148,12 @@ export default function AdminLiveTVPage() {
           <div className="aspect-video w-full rounded-xl overflow-hidden bg-black border border-slate-200 dark:border-slate-800 shadow-inner relative flex items-center justify-center">
             {streamUrl ? (
               <iframe
-                src={streamUrl}
+                src={formatLiveStreamEmbedUrl(streamUrl)}
                 title="Live Stream Preview"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+                loading="lazy"
                 className="w-full h-full border-0"
               ></iframe>
             ) : (
@@ -199,15 +206,29 @@ export default function AdminLiveTVPage() {
             </div>
 
             <div>
-              <label className="block text-slate-700 dark:text-slate-400 font-semibold mb-1">
-                {b("Stream URL (YouTube Embed / HLS URL):", "स्ट्रीम URL (YouTube Embed / HLS Stream URL):")}
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-slate-700 dark:text-slate-400 font-semibold">
+                  {b("Stream URL (YouTube Watch / Live / Embed or HLS):", "स्ट्रीम URL (YouTube Watch / Live / Embed या HLS):")}
+                </label>
+                {streamUrl && (
+                  <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">
+                    {b("Auto-converted to embed format", "ऑटो-कन्वर्टेड एम्बेड")}
+                  </span>
+                )}
+              </div>
               <input
                 type="text"
                 value={streamUrl}
                 onChange={(e) => setStreamUrl(e.target.value)}
+                placeholder="e.g. https://www.youtube.com/watch?v=... or https://youtu.be/..."
                 className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white font-mono text-[11px] focus:outline-hidden focus:border-red-500"
               />
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 block">
+                {b(
+                  "Paste any YouTube watch, youtu.be, youtube.com/live, or HLS stream link. It will automatically play without iframe blocking.",
+                  "YouTube का कोई भी लिंक (Watch, youtu.be, Live) पेस्ट करें। यह बिना किसी एरर के ऑटोमैटिक स्ट्रीम होगा।"
+                )}
+              </span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

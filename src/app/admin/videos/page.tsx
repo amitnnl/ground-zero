@@ -42,6 +42,9 @@ export default function AdminVideosPage() {
     isShort: false,
   });
 
+  const [deleteConfirmVideo, setDeleteConfirmVideo] = useState<VideoItem | null>(null);
+  const [deleting, setDeleting] = useState(false);
+
   const fetchVideos = async () => {
     setLoading(true);
     try {
@@ -59,6 +62,25 @@ export default function AdminVideosPage() {
       // silent fail
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/videos?id=${id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setNotification(b("Video deleted successfully!", "वीडियो सफलतापूर्वक हटा दिया गया!"));
+        setTimeout(() => setNotification(null), 3500);
+        setDeleteConfirmVideo(null);
+        fetchVideos();
+      }
+    } catch (err) {
+      console.error("Failed to delete video:", err);
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -96,22 +118,6 @@ export default function AdminVideosPage() {
       alert(b("Unable to connect to server", "सर्वर से संपर्क करने में असमर्थ"));
     } finally {
       setSubmitting(false);
-    }
-  };
-
-  const handleDelete = async (id: string) => {
-    if (!confirm(b("Are you sure you want to remove this video?", "क्या आप इस वीडियो को हटाना चाहते हैं?"))) return;
-    try {
-      const res = await fetch(`/api/videos?id=${id}`, { method: "DELETE" });
-      const ct = res.headers.get("content-type") || "";
-      if (res.ok && ct.includes("application/json")) {
-        const data = await res.json();
-        if (data.success) {
-          setVideos((prev) => prev.filter((v) => v.id !== id));
-        }
-      }
-    } catch (err) {
-      console.error(err);
     }
   };
 
@@ -316,9 +322,9 @@ export default function AdminVideosPage() {
                       <ExternalLink className="w-4 h-4" />
                     </a>
                     <button
-                      onClick={() => handleDelete(vid.id)}
+                      onClick={() => setDeleteConfirmVideo(vid)}
                       className="p-2 rounded-lg bg-red-50 hover:bg-red-100 dark:bg-red-500/10 dark:hover:bg-red-500/20 text-red-600 dark:text-red-400 transition-colors cursor-pointer"
-                      title={b("Delete", "हटाएं")}
+                      title={b("Delete Video", "वीडियो हटाएं")}
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -483,6 +489,49 @@ export default function AdminVideosPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+      {/* Delete Video Confirmation Modal */}
+      {deleteConfirmVideo && (
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 w-full max-w-md shadow-2xl space-y-4">
+            <div className="flex items-center gap-3 text-rose-600 dark:text-rose-400">
+              <div className="w-10 h-10 rounded-full bg-rose-500/10 flex items-center justify-center shrink-0">
+                <Trash2 size={20} />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                  {b("Delete Video Bulletin", "वीडियो बुलेटिन हटाएं")}
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  {b("This action cannot be undone.", "यह क्रिया पूर्ववत नहीं की जा सकती।")}
+                </p>
+              </div>
+            </div>
+
+            <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl text-xs font-semibold text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700/60 line-clamp-2">
+              {deleteConfirmVideo.title}
+            </div>
+
+            <div className="flex items-center justify-end gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => setDeleteConfirmVideo(null)}
+                className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+              >
+                {b("Cancel", "रद्द करें")}
+              </button>
+              <button
+                type="button"
+                disabled={deleting}
+                onClick={() => handleDelete(deleteConfirmVideo.id)}
+                className="px-4 py-2 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-500 text-white shadow-sm transition flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+              >
+                <Trash2 size={13} />
+                {deleting ? b("Deleting...", "हटाया जा रहा है...") : b("Delete Video", "वीडियो हटाएं")}
+              </button>
+            </div>
           </div>
         </div>
       )}

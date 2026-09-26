@@ -1,1 +1,27 @@
-[]
+[
+  {
+    "id": "sub-1790385755582",
+    "endpoint": "https://fcm.googleapis.com/fcm/send/groundzero-sub-1790385755476",
+    "createdAt": "2026-09-26T01:22:35.582Z"
+  },
+  {
+    "id": "sub-1790385755633",
+    "endpoint": "https://fcm.googleapis.com/fcm/send/groundzero-sub-1790385755477",
+    "createdAt": "2026-09-26T01:22:35.633Z"
+  },
+  {
+    "id": "sub-1790385755711",
+    "endpoint": "https://fcm.googleapis.com/fcm/send/groundzero-sub-1790385755478",
+    "createdAt": "2026-09-26T01:22:35.711Z"
+  },
+  {
+    "id": "sub-1790385755781",
+    "endpoint": "https://fcm.googleapis.com/fcm/send/groundzero-sub-1790385755500",
+    "createdAt": "2026-09-26T01:22:35.781Z"
+  },
+  {
+    "id": "sub-1790385755805",
+    "endpoint": "https://fcm.googleapis.com/fcm/send/groundzero-sub-1790385755520",
+    "createdAt": "2026-09-26T01:22:35.805Z"
+  }
+]

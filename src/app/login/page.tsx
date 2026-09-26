@@ -70,6 +70,14 @@ function LoginForm() {
           reason: requestReason.trim() || "User requested password reset via login screen",
         }),
       });
+      const ct = res.headers.get("content-type") || "";
+      if (!ct.includes("application/json")) {
+        setResetFeedback({
+          success: false,
+          message: b("Server returned an invalid response. Please try again.", "सर्वर से अमान्य प्रतिक्रिया मिली। कृपया पुनः प्रयास करें।"),
+        });
+        return;
+      }
       const data = await res.json();
       if (res.ok && data.success) {
         setResetFeedback({

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   DollarSign,
   TrendingUp,
@@ -22,11 +23,13 @@ import {
 import { AdCampaign } from "@/lib/types";
 import { useAuth } from "@/lib/authContext";
 import { useLanguage } from "@/lib/languageContext";
+import { useSettings } from "@/lib/settingsContext";
 import PermissionGuard from "@/components/PermissionGuard";
 
 export default function AdminAdsPage() {
   const { hasPermission } = useAuth();
   const { lang, b } = useLanguage();
+  const { settings } = useSettings();
   const [ads, setAds] = useState<AdCampaign[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterPlacement, setFilterPlacement] = useState<string>("all");
@@ -185,6 +188,23 @@ export default function AdminAdsPage() {
           <span>{b("Create New Campaign", "नया विज्ञापन बनाएं (New Campaign)")}</span>
         </button>
       </div>
+
+      {!settings.ads_enabled && (
+        <div className="p-4 bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 rounded-xl flex items-center justify-between text-xs">
+          <div className="flex items-center gap-2.5">
+            <AlertCircle className="w-4 h-4 text-amber-500 shrink-0" />
+            <span>
+              {b(
+                "Display Ads are currently globally disabled in Site Settings. Ad banners will not render on public pages.",
+                "साइट सेटिंग्स में विज्ञापन (Ads) वर्तमान में वैश्विक रूप से बंद (Disabled) हैं। सार्वजनिक वेबसाइट पर विज्ञापन प्रदर्शित नहीं होंगे।"
+              )}
+            </span>
+          </div>
+          <Link href="/admin/settings" className="font-bold underline ml-2 shrink-0">
+            {b("Enable in Settings ›", "सेटिंग्स में चालू करें ›")}
+          </Link>
+        </div>
+      )}
 
       {notification && (
         <div className="p-4 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30 text-emerald-800 dark:text-emerald-300 rounded-xl flex items-center justify-between text-sm">

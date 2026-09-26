@@ -263,7 +263,7 @@ export default function AdminSettingsPage() {
                 <Settings size={20} />
               </span>
               <span className="text-xs font-black uppercase tracking-wider text-rose-600 dark:text-rose-400">
-                Ground Zero News Admin Console
+                {settings.site_name || "Ground Zero News"} Admin Console
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">

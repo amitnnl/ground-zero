@@ -57,6 +57,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const refreshUsers = async () => {
     try {
       const res = await fetch("/api/users");
+      if (!res.ok) return;
+      const ct = res.headers.get("content-type") || "";
+      if (!ct.includes("application/json")) return;
       const data = await res.json();
       if (data?.success && data?.users) {
         setAllUsers(data.users);
@@ -116,6 +119,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials),
       });
+
+      const ct = res.headers.get("content-type") || "";
+      if (!ct.includes("application/json")) {
+        return { success: false, error: "सर्वर से अमान्य प्रतिक्रिया मिली (Invalid Server Response)" };
+      }
 
       const data = await res.json();
       if (res.ok && data?.success && data?.user) {

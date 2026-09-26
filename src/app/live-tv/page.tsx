@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { Tv, Radio, Flame, Eye, Calendar, Clock, Share2, ArrowLeft } from "lucide-react";
 import { getLiveStream, getArticles } from "@/lib/db";
+import { formatLiveStreamEmbedUrl } from "@/lib/videoUtils";
 
 export const metadata = {
   title: "Live TV 24x7 - Ground Zero News (ग्राउंड ज़ीरो लाइव टीवी)",
@@ -49,9 +50,12 @@ export default async function PublicLiveTVPage() {
             <div className="aspect-video w-full rounded-3xl overflow-hidden bg-black border border-slate-300 dark:border-slate-800 shadow-2xl relative flex items-center justify-center">
               {stream.streamUrl ? (
                 <iframe
-                  src={stream.streamUrl}
+                  src={formatLiveStreamEmbedUrl(stream.streamUrl)}
                   title={stream.channelName}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                  loading="lazy"
                   className="w-full h-full border-0"
                 ></iframe>
               ) : (

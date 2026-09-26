@@ -2,7 +2,7 @@
   "id": "live-stream-main",
   "channelName": "GROUND ZERO LIVE 24x7 (साउथ हरियाणा न्यूज़)",
   "isLive": true,
-  "streamUrl": "https://www.youtube.com/embed/dewccxNzJbU?autoplay=1&mute=1",
+  "streamUrl": "https://www.youtube-nocookie.com/embed/dewccxNzJbU",
   "streamType": "youtube",
   "currentProgram": "साउथ हरियाणा 8 PM प्राइम बुलेटिन",
   "currentHost": "अमित कुमार (वरिष्ठ संपादक)",

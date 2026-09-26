@@ -2,6 +2,10 @@
 
 @custom-variant dark (&:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *));
 
+@theme {
+  --color-slate-900: #1E293B;
+}
+
 :root {
   --primary: #E11D48; /* Editorial Crimson */
   --primary-hover: #BE123C;
@@ -11,7 +15,7 @@
   --bg-page: #F8FAFC;
   --card-bg: #FFFFFF;
   --border-subtle: #E2E8F0;
-  --text-primary: #0F172A;
+  --text-primary: #1E293B; /* Soft Slate replacing harsh #0F172A in light mode */
   --text-secondary: #475569;
   --text-muted: #94A3B8;
 }

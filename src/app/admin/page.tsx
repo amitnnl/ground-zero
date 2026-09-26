@@ -24,6 +24,7 @@ import {
 import { Article, CitizenReport, AuditLog } from "@/lib/types";
 import { useAuth } from "@/lib/authContext";
 import { useLanguage } from "@/lib/languageContext";
+import { useSettings } from "@/lib/settingsContext";
 
 interface DashboardData {
   stats: {
@@ -48,6 +49,7 @@ interface DashboardData {
 export default function AdminDashboardPage() {
   const { currentUser, hasPermission } = useAuth();
   const { b, lang } = useLanguage();
+  const { settings } = useSettings();
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -100,9 +102,18 @@ export default function AdminDashboardPage() {
       <div className="bg-white dark:bg-gradient-to-r dark:from-slate-950 dark:via-slate-900 dark:to-rose-950 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm dark:shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4 transition-colors">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest px-2 py-0.5 rounded bg-rose-50 dark:bg-rose-500/20 text-[#E11D48] dark:text-rose-400 border border-rose-200 dark:border-rose-500/30">
-              <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping"></span>
-              {b("LIVE NEWS DESK", "लाइव न्यूज़ डेस्क")}
+            <span
+              style={{
+                borderColor: `${settings.primary_color || "#E11D48"}40`,
+                color: settings.primary_color || "#E11D48",
+              }}
+              className="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest px-2 py-0.5 rounded bg-rose-50 dark:bg-rose-500/20 border"
+            >
+              <span
+                style={{ backgroundColor: settings.primary_color || "#E11D48" }}
+                className="w-1.5 h-1.5 rounded-full animate-ping"
+              ></span>
+              {b(`${settings.site_name?.toUpperCase() || "LIVE"} NEWS DESK`, `${settings.site_name || "लाइव"} न्यूज़ डेस्क`)}
             </span>
             <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
               {new Date().toLocaleDateString(lang === "hi" ? "hi-IN" : "en-US", {
@@ -141,7 +152,8 @@ export default function AdminDashboardPage() {
           </Link>
           <Link
             href="/admin/new"
-            className="px-4 py-2 rounded-xl bg-[#E11D48] hover:bg-rose-700 text-white font-bold text-xs shadow-md transition flex items-center gap-2"
+            style={{ backgroundColor: settings.primary_color || "#E11D48" }}
+            className="px-4 py-2 rounded-xl text-white font-bold text-xs shadow-md hover:opacity-90 transition flex items-center gap-2"
           >
             <PlusCircle size={15} />
             <span>{b("Publish Story", "समाचार प्रकाशित करें")}</span>

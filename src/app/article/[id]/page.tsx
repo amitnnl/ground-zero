@@ -223,8 +223,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 <iframe
                   src={`https://www.youtube-nocookie.com/embed/${article.youtubeId}`}
                   title={article.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
                   allowFullScreen
+                  loading="lazy"
                   className="w-full h-full border-0"
                 />
               </div>

@@ -15,6 +15,7 @@ import {
   Share2,
   UploadCloud,
   Camera,
+  Trash2,
 } from "lucide-react";
 import SocialSyndicationModal from "@/components/SocialSyndicationModal";
 import { SocialPostPayload } from "@/lib/socialFormatter";
@@ -205,6 +206,37 @@ function ArticleForm() {
       alert(b("Network error during AI generation.", "AI जनरेशन में नेटवर्क त्रुटि आई।"));
     } finally {
       setAiLoading(false);
+    }
+  };
+
+  const [deletingArticle, setDeletingArticle] = useState(false);
+
+  const handleDeleteCurrentArticle = async () => {
+    if (!editId) return;
+    const confirmed = window.confirm(
+      b(
+        "Are you sure you want to permanently delete this news article?",
+        "क्या आप वाकई इस समाचार को स्थायी रूप से हटाना चाहते हैं?"
+      )
+    );
+    if (!confirmed) return;
+
+    setDeletingArticle(true);
+    try {
+      const res = await fetch(`/api/articles/${editId}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        alert(b("Article deleted successfully!", "समाचार सफलतापूर्वक हटा दिया गया!"));
+        router.push("/admin/editorial");
+      } else {
+        const data = await res.json().catch(() => null);
+        alert(data?.error || "Failed to delete article");
+      }
+    } catch (err) {
+      console.error("Delete article error:", err);
+    } finally {
+      setDeletingArticle(false);
     }
   };
 
@@ -772,27 +804,43 @@ function ArticleForm() {
           </label>
         </div>
 
-        {/* Submit Button */}
-        <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex justify-end gap-3">
-          <Link
-            href="/admin"
-            className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-          >
-            {b("Cancel", "रद्द करें (Cancel)")}
-          </Link>
+        {/* Submit & Action Buttons */}
+        <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+          {editId ? (
+            <button
+              type="button"
+              disabled={deletingArticle}
+              onClick={handleDeleteCurrentArticle}
+              className="px-4 py-2 rounded-xl text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+            >
+              <Trash2 size={14} />
+              <span>{deletingArticle ? b("Deleting...", "हटाया जा रहा है...") : b("Delete Article", "समाचार हटाएं (Delete Article)")}</span>
+            </button>
+          ) : (
+            <div />
+          )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="flex items-center gap-2 bg-[#d90000] hover:bg-[#b80000] disabled:opacity-50 text-white font-bold text-xs sm:text-sm px-6 py-2.5 rounded-xl transition-all shadow-xs cursor-pointer"
-          >
-            <Save size={16} />
-            <span>
-              {loading
-                ? b("Publishing article...", "प्रकाशित हो रहा है...")
-                : b("Publish & Syndicate to Social", "प्रकाशित करें व सोशल शेयर करें (Publish & Post)")}
-            </span>
-          </button>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/admin/editorial"
+              className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            >
+              {b("Cancel", "रद्द करें (Cancel)")}
+            </Link>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex items-center gap-2 bg-[#d90000] hover:bg-[#b80000] disabled:opacity-50 text-white font-bold text-xs sm:text-sm px-6 py-2.5 rounded-xl transition-all shadow-xs cursor-pointer"
+            >
+              <Save size={16} />
+              <span>
+                {loading
+                  ? b("Publishing article...", "प्रकाशित हो रहा है...")
+                  : b("Publish & Syndicate to Social", "प्रकाशित करें व सोशल शेयर करें (Publish & Post)")}
+              </span>
+            </button>
+          </div>
         </div>
       </form>
 

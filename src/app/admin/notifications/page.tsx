@@ -17,10 +17,12 @@ import {
 } from "lucide-react";
 import { PushAlert } from "@/lib/types";
 import { useLanguage } from "@/lib/languageContext";
+import { useSettings } from "@/lib/settingsContext";
 import PermissionGuard from "@/components/PermissionGuard";
 
 export default function AdminNotificationsPage() {
   const { lang, b } = useLanguage();
+  const { settings } = useSettings();
   const [alerts, setAlerts] = useState<PushAlert[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -102,30 +104,47 @@ export default function AdminNotificationsPage() {
   return (
     <PermissionGuard permission="MANAGE_NOTIFICATIONS">
       <div className="space-y-6">
-      {/* Top Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-slate-950 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="p-2 rounded-xl bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-500/20">
-              <BellRing className="w-6 h-6" />
-            </span>
-            <div>
-              <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
-                {b("Push Broadcast & Breaking Alerts", "पुश नोटिफिकेशन एवं ब्रेकिंग अलर्ट्स (Push Alerts)")}
-                <span className="text-xs px-2.5 py-0.5 rounded-full bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-500/40">
-                  Instant Dispatch
-                </span>
-              </h1>
-              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-0.5">
-                {b(
-                  "Broadcast breaking news flashes and community advisories to thousands of readers instantly",
-                  "लाखों पंजीकृत मोबाइल व वेब पाठकों तक एक सेकंड में ब्रेकिंग न्यूज़ अलर्ट्स पहुंचाएं"
-                )}
-              </p>
+        {/* Top Header Banner */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-slate-950 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="p-2 rounded-xl bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-500/20">
+                <BellRing className="w-6 h-6" />
+              </span>
+              <div>
+                <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+                  {b("Push Broadcast & Breaking Alerts", "पुश नोटिफिकेशन एवं ब्रेकिंग अलर्ट्स (Push Alerts)")}
+                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-500/40">
+                    Instant Dispatch
+                  </span>
+                </h1>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-0.5">
+                  {b(
+                    "Broadcast breaking news flashes and community advisories to thousands of readers instantly",
+                    "लाखों पंजीकृत मोबाइल व वेब पाठकों तक एक सेकंड में ब्रेकिंग न्यूज़ अलर्ट्स पहुंचाएं"
+                  )}
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+
+      {!settings.web_push_enabled && !settings.onesignal_enabled && (
+        <div className="p-4 bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 rounded-xl flex items-center justify-between text-xs">
+          <div className="flex items-center gap-2.5">
+            <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />
+            <span>
+              {b(
+                "Push Notifications are currently disabled globally in Site Settings. Dispatch will only save logs.",
+                "साइट सेटिंग्स में पुश नोटिफिकेशन वर्तमान में निष्क्रिय (Disabled) हैं। अलर्ट केवल डेटाबेस लॉग में सुरक्षित होंगे।"
+              )}
+            </span>
+          </div>
+          <Link href="/admin/settings" className="font-bold underline ml-2 shrink-0">
+            {b("Enable in Settings ›", "सेटिंग्स में चालू करें ›")}
+          </Link>
+        </div>
+      )}
 
       {notification && (
         <div className="p-4 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30 text-emerald-800 dark:text-emerald-300 rounded-xl flex items-center justify-between text-sm">
@@ -319,15 +338,26 @@ export default function AdminNotificationsPage() {
             {/* Simulated Phone Lockscreen Notification */}
             <div className="bg-slate-100 dark:bg-slate-900/80 border border-slate-300 dark:border-slate-700/80 rounded-2xl p-4 shadow-xl space-y-2 backdrop-blur-md">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-4 h-4 rounded-md bg-red-600 flex items-center justify-center text-[9px] font-black text-white">
-                    GZ
-                  </div>
-                  <span className="text-[11px] font-bold text-slate-800 dark:text-slate-300">
-                    GROUND ZERO NEWS
+                <div className="flex items-center gap-1.5 min-w-0">
+                  {settings.site_logo ? (
+                    <img
+                      src={settings.site_logo}
+                      alt={settings.site_name}
+                      className="w-4 h-4 rounded-md object-contain bg-white shrink-0"
+                    />
+                  ) : (
+                    <div
+                      style={{ backgroundColor: settings.primary_color || "#DC2626" }}
+                      className="w-4 h-4 rounded-md flex items-center justify-center text-[9px] font-black text-white shrink-0"
+                    >
+                      {settings.site_name ? settings.site_name.slice(0, 2).toUpperCase() : "GZ"}
+                    </div>
+                  )}
+                  <span className="text-[11px] font-bold text-slate-800 dark:text-slate-300 truncate max-w-[150px]">
+                    {(settings.site_name || "GROUND ZERO NEWS").toUpperCase()}
                   </span>
                 </div>
-                <span className="text-[10px] text-slate-500">{b("now", "अभी (now)")}</span>
+                <span className="text-[10px] text-slate-500 shrink-0">{b("now", "अभी (now)")}</span>
               </div>
 
               <h4 className="text-xs font-bold text-slate-900 dark:text-white line-clamp-1">
