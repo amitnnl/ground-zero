@@ -1,5 +1,49 @@
 [
   {
+    "userId": "editor-user",
+    "userName": "Admin Desk",
+    "userRole": "EDITOR_IN_CHIEF",
+    "action": "HUMAN_VERIFIED_AND_DISTRIBUTED",
+    "entityType": "article",
+    "entityId": "art-1790496426479",
+    "details": "मानव सत्यापन पूर्ण: संपादक \"Admin Desk\" द्वारा साक्ष्य पुष्टि उपरांत 6 प्लेटफ़ॉर्म्स (website) पर स्वचालित वितरण संपन्न।",
+    "id": "log-1790496466252-km2v",
+    "timestamp": "2026-09-27T08:07:46.252Z"
+  },
+  {
+    "userId": "current-user",
+    "userName": "Editorial Desk",
+    "userRole": "EDITOR",
+    "action": "UPDATE_STATUS",
+    "entityType": "article",
+    "entityId": "art-1790496426479",
+    "details": "Status changed from DRAFT to PUBLISHED",
+    "id": "log-1790496466251-dag5",
+    "timestamp": "2026-09-27T08:07:46.251Z"
+  },
+  {
+    "userId": "current-user",
+    "userName": "Admin Desk (AI Assisted)",
+    "userRole": "REPORTER",
+    "action": "CREATE_ARTICLE",
+    "entityType": "article",
+    "entityId": "art-1790496426479",
+    "details": "Created article \"Mahendergarh News | णाल घोष पर हमले से भ...\" in status DRAFT",
+    "id": "log-1790496426484-k6e0",
+    "timestamp": "2026-09-27T08:07:06.484Z"
+  },
+  {
+    "userId": "usr-super-admin",
+    "userName": "Admin Desk",
+    "userRole": "SUPER_ADMIN",
+    "action": "USER_LOGIN",
+    "entityType": "user",
+    "entityId": "usr-super-admin",
+    "details": "स्टाफ लॉगिन संपन्न: Admin Desk (SUPER_ADMIN) - हरियाणा (HQ)",
+    "id": "log-1790496266256-6dl8",
+    "timestamp": "2026-09-27T08:04:26.256Z"
+  },
+  {
     "userId": "usr-super-admin",
     "userName": "Admin Desk",
     "userRole": "SUPER_ADMIN",

@@ -7,10 +7,10 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "**" },
     ],
   },
+  turbopack: {},
   // Optimize server response
   compress: true,
   poweredByHeader: false,
 };
 
 export default nextConfig;
-
